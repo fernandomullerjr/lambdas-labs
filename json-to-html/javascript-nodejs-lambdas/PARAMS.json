@@ -1,0 +1,245 @@
+
+
+Examples:
+
+Calling the listFindingAggregations operation
+
+var params = {
+  aggregationType: FINDING_TYPE | PACKAGE | TITLE | REPOSITORY | AMI | AWS_EC2_INSTANCE | AWS_ECR_CONTAINER | IMAGE_LAYER | ACCOUNT | AWS_LAMBDA_FUNCTION | LAMBDA_LAYER, /* required */
+  accountIds: [
+    {
+      comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+      value: 'STRING_VALUE' /* required */
+    },
+    /* more items */
+  ],
+  aggregationRequest: {
+    accountAggregation: {
+      findingType: NETWORK_REACHABILITY | PACKAGE_VULNERABILITY,
+      resourceType: AWS_EC2_INSTANCE | AWS_ECR_CONTAINER_IMAGE | AWS_LAMBDA_FUNCTION,
+      sortBy: CRITICAL | HIGH | ALL,
+      sortOrder: ASC | DESC
+    },
+    amiAggregation: {
+      amis: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      sortBy: CRITICAL | HIGH | ALL | AFFECTED_INSTANCES,
+      sortOrder: ASC | DESC
+    },
+    awsEcrContainerAggregation: {
+      architectures: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      imageShas: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      imageTags: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      repositories: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      resourceIds: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      sortBy: CRITICAL | HIGH | ALL,
+      sortOrder: ASC | DESC
+    },
+    ec2InstanceAggregation: {
+      amis: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      instanceIds: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      instanceTags: [
+        {
+          comparison: EQUALS, /* required */
+          key: 'STRING_VALUE', /* required */
+          value: 'STRING_VALUE'
+        },
+        /* more items */
+      ],
+      operatingSystems: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      sortBy: NETWORK_FINDINGS | CRITICAL | HIGH | ALL,
+      sortOrder: ASC | DESC
+    },
+    findingTypeAggregation: {
+      findingType: NETWORK_REACHABILITY | PACKAGE_VULNERABILITY,
+      resourceType: AWS_EC2_INSTANCE | AWS_ECR_CONTAINER_IMAGE | AWS_LAMBDA_FUNCTION,
+      sortBy: CRITICAL | HIGH | ALL,
+      sortOrder: ASC | DESC
+    },
+    imageLayerAggregation: {
+      layerHashes: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      repositories: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      resourceIds: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      sortBy: CRITICAL | HIGH | ALL,
+      sortOrder: ASC | DESC
+    },
+    lambdaFunctionAggregation: {
+      functionNames: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      functionTags: [
+        {
+          comparison: EQUALS, /* required */
+          key: 'STRING_VALUE', /* required */
+          value: 'STRING_VALUE'
+        },
+        /* more items */
+      ],
+      resourceIds: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      runtimes: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      sortBy: CRITICAL | HIGH | ALL,
+      sortOrder: ASC | DESC
+    },
+    lambdaLayerAggregation: {
+      functionNames: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      layerArns: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      resourceIds: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      sortBy: CRITICAL | HIGH | ALL,
+      sortOrder: ASC | DESC
+    },
+    packageAggregation: {
+      packageNames: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      sortBy: CRITICAL | HIGH | ALL,
+      sortOrder: ASC | DESC
+    },
+    repositoryAggregation: {
+      repositories: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      sortBy: CRITICAL | HIGH | ALL | AFFECTED_IMAGES,
+      sortOrder: ASC | DESC
+    },
+    titleAggregation: {
+      resourceType: AWS_EC2_INSTANCE | AWS_ECR_CONTAINER_IMAGE | AWS_LAMBDA_FUNCTION,
+      sortBy: CRITICAL | HIGH | ALL,
+      sortOrder: ASC | DESC,
+      titles: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ],
+      vulnerabilityIds: [
+        {
+          comparison: EQUALS | PREFIX | NOT_EQUALS, /* required */
+          value: 'STRING_VALUE' /* required */
+        },
+        /* more items */
+      ]
+    }
+  },
+  maxResults: 'NUMBER_VALUE',
+  nextToken: 'STRING_VALUE'
+};
+inspector2.listFindingAggregations(params, function(err, data) {
+  if (err) console.log(err, err.stack); // an error occurred
+  else     console.log(data);           // successful response
+});
+
+Parameters:
