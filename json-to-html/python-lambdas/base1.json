@@ -1,0 +1,338 @@
+{
+    "findings": [
+        {
+            "awsAccountId": "574635504822",
+            "description": " Heap-based Buffer Overflow in GitHub repository vim/vim prior to 9.0.1376.",
+            "exploitAvailable": "NO",
+            "findingArn": "arn:aws:inspector2:sa-east-1:574635504822:finding/0013598e4e083e9999d68962dd571249",
+            "firstObservedAt": "2023-05-04T14:15:25.841Z",
+            "fixAvailable": "YES",
+            "lastObservedAt": "2023-05-04T14:15:25.841Z",
+            "packageVulnerabilityDetails": {
+                "cvss": [
+                    {
+                        "baseScore": 6.6,
+                        "scoringVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:H",
+                        "source": "NVD",
+                        "version": "3.1"
+                    }
+                ],
+                "referenceUrls": [
+                    "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-1170",
+                    "https://ubuntu.com/security/notices/USN-5963-1"
+                ],
+                "relatedVulnerabilities": [],
+                "source": "UBUNTU_CVE",
+                "sourceUrl": "https://people.canonical.com/~ubuntu-security/cve/2023/CVE-2023-1170.html",
+                "vendorCreatedAt": "2023-03-03T23:15:00Z",
+                "vendorSeverity": "medium",
+                "vulnerabilityId": "CVE-2023-1170",
+                "vulnerablePackages": [
+                    {
+                        "arch": "X86_64",
+                        "epoch": 2,
+                        "fixedInVersion": "2:8.1.2269-1ubuntu5.12",
+                        "name": "vim",
+                        "packageManager": "OS",
+                        "release": "1ubuntu5.9",
+                        "remediation": "apt update && apt install --only-upgrade vim",
+                        "version": "8.1.2269"
+                    },
+                    {
+                        "arch": "X86_64",
+                        "epoch": 2,
+                        "fixedInVersion": "2:8.1.2269-1ubuntu5.12",
+                        "name": "vim-tiny",
+                        "packageManager": "OS",
+                        "release": "1ubuntu5.9",
+                        "remediation": "apt update && apt install --only-upgrade vim-tiny",
+                        "version": "8.1.2269"
+                    }
+                ]
+            },
+            "remediation": {
+                "recommendation": {
+                    "text": "None Provided"
+                }
+            },
+            "resources": [
+                {
+                    "details": {
+                        "awsEc2Instance": {
+                            "iamInstanceProfileArn": "arn:aws:iam::574635504822:instance-profile/RunCommand",
+                            "imageId": "ami-06e297f909059c171",
+                            "ipV4Addresses": [
+                                "172.30.4.168"
+                            ],
+                            "ipV6Addresses": [],
+                            "keyName": "luxor-21-08-2018-0",
+                            "launchedAt": "2023-05-04T14:13:47Z",
+                            "platform": "UBUNTU_20_04",
+                            "subnetId": "subnet-0aa87558d279ec9b4",
+                            "type": "c5.4xlarge",
+                            "vpcId": "vpc-91831ff4"
+                        }
+                    },
+                    "id": "i-0415ee9c35d4406ef",
+                    "partition": "aws",
+                    "region": "sa-east-1",
+                    "tags": {
+                        "aws:autoscaling:groupName": "luxor-asg-php-7-requisicoes",
+                        "aws:ec2:fleet-id": "fleet-2d8e1d2f-f834-6bbe-2e18-84a8a3ec40b1",
+                        "DevOpsRelatorioAmazonInspector": "1",
+                        "Billing": "arquitetura",
+                        "Ambiente": "luxor-prod-php-7-requisicoes",
+                        "aws:ec2launchtemplate:version": "26",
+                        "aws:ec2launchtemplate:id": "lt-09332363f4cb896d3",
+                        "syncuser": "on",
+                        "Name": "[luxor] AutoScaling-PHP-7-requisicoes"
+                    },
+                    "type": "AWS_EC2_INSTANCE"
+                }
+            ],
+            "severity": "MEDIUM",
+            "status": "ACTIVE",
+            "title": "CVE-2023-1170 - vim, vim-tiny",
+            "type": "PACKAGE_VULNERABILITY",
+            "updatedAt": "2023-05-04T14:15:25.841Z"
+        },
+        {
+            "awsAccountId": "574635504822",
+            "description": " Stack-based Buffer Overflow in GitHub repository vim/vim prior to 9.0.",
+            "exploitAvailable": "NO",
+            "findingArn": "arn:aws:inspector2:sa-east-1:574635504822:finding/ff52658379d87f999c4359cc123f4732",
+            "firstObservedAt": "2023-05-04T14:17:08.924Z",
+            "fixAvailable": "YES",
+            "lastObservedAt": "2023-05-04T14:17:08.924Z",
+            "packageVulnerabilityDetails": {
+                "cvss": [
+                    {
+                        "baseScore": 6.8,
+                        "scoringVector": "AV:N/AC:M/Au:N/C:P/I:P/A:P",
+                        "source": "NVD",
+                        "version": "2.0"
+                    },
+                    {
+                        "baseScore": 7.8,
+                        "scoringVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+                        "source": "NVD",
+                        "version": "3.1"
+                    }
+                ],
+                "referenceUrls": [
+                    "https://ubuntu.com/security/notices/USN-5723-1",
+                    "https://ubuntu.com/security/notices/USN-5995-1",
+                    "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-2304"
+                ],
+                "relatedVulnerabilities": [],
+                "source": "UBUNTU_CVE",
+                "sourceUrl": "https://people.canonical.com/~ubuntu-security/cve/2022/CVE-2022-2304.html",
+                "vendorCreatedAt": "2022-07-05T13:15:00Z",
+                "vendorSeverity": "medium",
+                "vulnerabilityId": "CVE-2022-2304",
+                "vulnerablePackages": [
+                    {
+                        "arch": "X86_64",
+                        "epoch": 2,
+                        "fixedInVersion": "2:8.1.2269-1ubuntu5.13",
+                        "name": "vim",
+                        "packageManager": "OS",
+                        "release": "1ubuntu5.9",
+                        "remediation": "apt update && apt install --only-upgrade vim",
+                        "version": "8.1.2269"
+                    },
+                    {
+                        "arch": "X86_64",
+                        "epoch": 2,
+                        "fixedInVersion": "2:8.1.2269-1ubuntu5.13",
+                        "name": "vim-tiny",
+                        "packageManager": "OS",
+                        "release": "1ubuntu5.9",
+                        "remediation": "apt update && apt install --only-upgrade vim-tiny",
+                        "version": "8.1.2269"
+                    }
+                ]
+            },
+            "remediation": {
+                "recommendation": {
+                    "text": "None Provided"
+                }
+            },
+            "resources": [
+                {
+                    "details": {
+                        "awsEc2Instance": {
+                            "iamInstanceProfileArn": "arn:aws:iam::574635504822:instance-profile/RunCommand",
+                            "imageId": "ami-0e24bad02f0872194",
+                            "ipV4Addresses": [
+                                "172.30.4.98"
+                            ],
+                            "ipV6Addresses": [],
+                            "keyName": "luxor-21-08-2018-0",
+                            "launchedAt": "2023-05-04T14:15:42Z",
+                            "platform": "UBUNTU_20_04",
+                            "subnetId": "subnet-0aa87558d279ec9b4",
+                            "type": "r5a.large",
+                            "vpcId": "vpc-91831ff4"
+                        }
+                    },
+                    "id": "i-06b2f79a29da7746b",
+                    "partition": "aws",
+                    "region": "sa-east-1",
+                    "tags": {
+                        "aws:autoscaling:groupName": "luxor-asg-php-7-queue",
+                        "aws:ec2:fleet-id": "fleet-8f9d3e05-228d-ee3c-2412-0f28fed3ebd0",
+                        "DevOpsRelatorioAmazonInspector": "1",
+                        "Billing": "arquitetura",
+                        "amb": "luxor-queue",
+                        "Ambiente": "luxor-queue",
+                        "aws:ec2launchtemplate:version": "35",
+                        "aws:ec2launchtemplate:id": "lt-092969c05aca14fee",
+                        "syncuser": "on",
+                        "Name": "[luxor] Auto-Scaling-QUEUE-Supervisor-PHP-7"
+                    },
+                    "type": "AWS_EC2_INSTANCE"
+                }
+            ],
+            "severity": "MEDIUM",
+            "status": "ACTIVE",
+            "title": "CVE-2022-2304 - vim, vim-tiny",
+            "type": "PACKAGE_VULNERABILITY",
+            "updatedAt": "2023-05-04T14:17:08.924Z"
+        },
+        {
+            "awsAccountId": "574635504822",
+            "description": " A flaw was found in ImageMagick. The vulnerability occurs due to improper use of open functions and leads to a denial of service. This flaw allows an attacker to crash the system.",
+            "exploitAvailable": "NO",
+            "findingArn": "arn:aws:inspector2:sa-east-1:574635504822:finding/ffabf790e5ec1051b86a32c3a9b230d5",
+            "firstObservedAt": "2023-05-04T14:22:20.468Z",
+            "fixAvailable": "YES",
+            "lastObservedAt": "2023-05-04T14:22:20.468Z",
+            "packageVulnerabilityDetails": {
+                "cvss": [
+                    {
+                        "baseScore": 4.3,
+                        "scoringVector": "AV:N/AC:M/Au:N/C:N/I:N/A:P",
+                        "source": "NVD",
+                        "version": "2.0"
+                    },
+                    {
+                        "baseScore": 5.5,
+                        "scoringVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+                        "source": "NVD",
+                        "version": "3.1"
+                    }
+                ],
+                "referenceUrls": [
+                    "https://ubuntu.com/security/notices/USN-5736-2",
+                    "https://ubuntu.com/security/notices/USN-5736-1",
+                    "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-4219"
+                ],
+                "relatedVulnerabilities": [],
+                "source": "UBUNTU_CVE",
+                "sourceUrl": "https://people.canonical.com/~ubuntu-security/cve/2021/CVE-2021-4219.html",
+                "vendorCreatedAt": "2022-03-23T20:15:00Z",
+                "vendorSeverity": "low",
+                "vulnerabilityId": "CVE-2021-4219",
+                "vulnerablePackages": [
+                    {
+                        "arch": "X86_64",
+                        "epoch": 8,
+                        "fixedInVersion": "8:6.9.10.23+dfsg-2.1ubuntu11.4+esm1",
+                        "name": "libmagickcore-6.q16-6",
+                        "packageManager": "OS",
+                        "release": "2.1ubuntu11.4",
+                        "remediation": "apt update && apt install --only-upgrade libmagickcore-6.q16-6",
+                        "version": "6.9.10.23+dfsg"
+                    },
+                    {
+                        "arch": "X86_64",
+                        "epoch": 8,
+                        "fixedInVersion": "8:6.9.10.23+dfsg-2.1ubuntu11.4+esm1",
+                        "name": "libmagickwand-6.q16-6",
+                        "packageManager": "OS",
+                        "release": "2.1ubuntu11.4",
+                        "remediation": "apt update && apt install --only-upgrade libmagickwand-6.q16-6",
+                        "version": "6.9.10.23+dfsg"
+                    },
+                    {
+                        "arch": "X86_64",
+                        "epoch": 8,
+                        "fixedInVersion": "8:6.9.10.23+dfsg-2.1ubuntu11.4+esm1",
+                        "name": "imagemagick-6.q16",
+                        "packageManager": "OS",
+                        "release": "2.1ubuntu11.4",
+                        "remediation": "apt update && apt install --only-upgrade imagemagick-6.q16",
+                        "version": "6.9.10.23+dfsg"
+                    },
+                    {
+                        "arch": "X86_64",
+                        "epoch": 8,
+                        "fixedInVersion": "8:6.9.10.23+dfsg-2.1ubuntu11.4+esm1",
+                        "name": "libmagickcore-6.q16-6-extra",
+                        "packageManager": "OS",
+                        "release": "2.1ubuntu11.4",
+                        "remediation": "apt update && apt install --only-upgrade libmagickcore-6.q16-6-extra",
+                        "version": "6.9.10.23+dfsg"
+                    },
+                    {
+                        "arch": "X86_64",
+                        "epoch": 8,
+                        "fixedInVersion": "8:6.9.10.23+dfsg-2.1ubuntu11.4+esm1",
+                        "name": "imagemagick",
+                        "packageManager": "OS",
+                        "release": "2.1ubuntu11.4",
+                        "remediation": "apt update && apt install --only-upgrade imagemagick",
+                        "version": "6.9.10.23+dfsg"
+                    }
+                ]
+            },
+            "remediation": {
+                "recommendation": {
+                    "text": "None Provided"
+                }
+            },
+            "resources": [
+                {
+                    "details": {
+                        "awsEc2Instance": {
+                            "iamInstanceProfileArn": "arn:aws:iam::574635504822:instance-profile/RunCommand",
+                            "imageId": "ami-0e24bad02f0872194",
+                            "ipV4Addresses": [
+                                "172.30.4.153"
+                            ],
+                            "ipV6Addresses": [],
+                            "keyName": "luxor-21-08-2018-0",
+                            "launchedAt": "2023-05-04T14:21:03Z",
+                            "platform": "UBUNTU_20_04",
+                            "subnetId": "subnet-0aa87558d279ec9b4",
+                            "type": "m5a.xlarge",
+                            "vpcId": "vpc-91831ff4"
+                        }
+                    },
+                    "id": "i-04e668b1627742918",
+                    "partition": "aws",
+                    "region": "sa-east-1",
+                    "tags": {
+                        "aws:autoscaling:groupName": "luxor-asg-php-7-queue",
+                        "aws:ec2:fleet-id": "fleet-399fa816-9527-468f-2698-092241c447ea",
+                        "DevOpsRelatorioAmazonInspector": "1",
+                        "Billing": "arquitetura",
+                        "amb": "luxor-queue",
+                        "Ambiente": "luxor-queue",
+                        "aws:ec2launchtemplate:version": "35",
+                        "aws:ec2launchtemplate:id": "lt-092969c05aca14fee",
+                        "syncuser": "on",
+                        "Name": "[luxor] Auto-Scaling-QUEUE-Supervisor-PHP-7"
+                    },
+                    "type": "AWS_EC2_INSTANCE"
+                }
+            ],
+            "severity": "LOW",
+            "status": "ACTIVE",
+            "title": "CVE-2021-4219 - libmagickcore-6.q16-6, libmagickwand-6.q16-6 and 3 more",
+            "type": "PACKAGE_VULNERABILITY",
+            "updatedAt": "2023-05-04T14:22:20.468Z"
+        }
+    ]
+}
