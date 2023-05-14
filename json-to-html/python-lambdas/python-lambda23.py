@@ -3,8 +3,8 @@ import boto3
 
 def lambda_handler(event, context):
     s3 = boto3.client('s3')
-    bucket_name = event['bucket_name']
-    object_name = event['object_name']
+    bucket_name = 'devops-luxor'
+    object_name = 'base1.json'
     
     try:
         response = s3.get_object(Bucket=bucket_name, Key=object_name)
