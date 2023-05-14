@@ -245,3 +245,119 @@ Response
 }
 ~~~~
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+Para converter um JSON para HTML em Python, podemos usar uma biblioteca chamada json2html. Primeiro, precisamos instalá-la usando o pip. No prompt de comando, digite o seguinte comando:
+
+pip install json2html
+
+Depois de instalada a biblioteca, podemos usar o seguinte código para converter um JSON para HTML:
+
+python
+
+import json
+from json2html import json2html
+
+def json_to_html(json_string):
+    json_object = json.loads(json_string)
+    html_string = json2html.convert(json=json_object)
+    return html_string
+
+Onde json_string é uma string contendo o JSON que desejamos converter para HTML. A função json_to_html converte o JSON para um objeto Python e, em seguida, usa a função convert da biblioteca json2html para gerar uma string HTML.
+
+Podemos chamar essa função com o seguinte código:
+
+python
+
+json_string = '{"name": "John", "age": 30, "city": "New York"}'
+html_string = json_to_html(json_string)
+print(html_string)
+
+Este código converte o seguinte JSON:
+
+json
+
+{
+  "name": "John",
+  "age": 30,
+  "city": "New York"
+}
+
+Para o seguinte HTML:
+
+html
+
+<table border="1"><tr><th>name</th><td>John</td></tr><tr><th>age</th><td>30</td></tr><tr><th>city</th><td>New York</td></tr></table>
+
+Este é um exemplo simples de conversão de um JSON para HTML, mas a biblioteca json2html oferece muitas opções de formatação e personalização. Consulte a documentação da biblioteca para saber mais.
+User
+não tenho acesso para instalar o json2html via pip, pois o código será executado via AWS Lambda
+ChatGPT
+
+Você pode incluir a biblioteca json2html diretamente no pacote que será enviado para a AWS Lambda. Isso pode ser feito baixando o pacote json2html no seu ambiente local e incluindo-o no diretório do seu projeto.
+
+Por exemplo, suponha que você tenha baixado o pacote json2html em um diretório chamado "libs" e seu projeto esteja organizado da seguinte maneira:
+
+markdown
+
+meu_projeto/
+|_ lambda_function.py
+|_ libs/
+   |_ json2html/
+      |_ json2html.py
+      |_ ...
+
+Em seguida, você pode importar a biblioteca json2html no seu código Python da seguinte maneira:
+
+python
+
+from libs.json2html import json2html
+import json
+
+def lambda_handler(event, context):
+    json_data = {"nome": "João", "sobrenome": "Silva", "idade": 30}
+    html = json2html.convert(json = json.dumps(json_data))
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "text/html"},
+        "body": html
+    }
+
+Dessa forma, quando você empacotar o seu projeto e enviar para a AWS Lambda, a biblioteca json2html estará incluída no pacote.
+
+
+
+
+
+
+
+
+
+
+# PENDENTE
+- Ver como instalar modulos do Python no AWS Lambda, para poder utilizar o json2html, por exemplo.
+- Instalar o "bs4 import BeautifulSoup" também.
+
+
+
+
+
+
+
+
+- Ver como instalar modulos do Python no AWS Lambda, para poder utilizar o json2html, por exemplo.
+https://www.youtube.com/watch?v=n74poysXaJM
+
+
+pip install json2html -t .
