@@ -264,7 +264,7 @@ pip install json2html
 
 Depois de instalada a biblioteca, podemos usar o seguinte código para converter um JSON para HTML:
 
-python
+~~~~python
 
 import json
 from json2html import json2html
@@ -273,32 +273,37 @@ def json_to_html(json_string):
     json_object = json.loads(json_string)
     html_string = json2html.convert(json=json_object)
     return html_string
+~~~~
 
 Onde json_string é uma string contendo o JSON que desejamos converter para HTML. A função json_to_html converte o JSON para um objeto Python e, em seguida, usa a função convert da biblioteca json2html para gerar uma string HTML.
 
 Podemos chamar essa função com o seguinte código:
 
-python
+~~~~python
 
 json_string = '{"name": "John", "age": 30, "city": "New York"}'
 html_string = json_to_html(json_string)
 print(html_string)
+~~~~
 
 Este código converte o seguinte JSON:
 
-json
+~~~~json
 
 {
   "name": "John",
   "age": 30,
   "city": "New York"
 }
+~~~~
 
 Para o seguinte HTML:
 
-html
+~~~~html
 
 <table border="1"><tr><th>name</th><td>John</td></tr><tr><th>age</th><td>30</td></tr><tr><th>city</th><td>New York</td></tr></table>
+~~~~
+
 
 Este é um exemplo simples de conversão de um JSON para HTML, mas a biblioteca json2html oferece muitas opções de formatação e personalização. Consulte a documentação da biblioteca para saber mais.
 User
@@ -347,6 +352,7 @@ Dessa forma, quando você empacotar o seu projeto e enviar para a AWS Lambda, a 
 
 # PENDENTE
 - Ver como instalar modulos do Python no AWS Lambda, para poder utilizar o json2html, por exemplo.
+https://www.youtube.com/watch?v=n74poysXaJM
 - Instalar o "bs4 import BeautifulSoup" também.
 
 
@@ -359,5 +365,26 @@ Dessa forma, quando você empacotar o seu projeto e enviar para a AWS Lambda, a 
 - Ver como instalar modulos do Python no AWS Lambda, para poder utilizar o json2html, por exemplo.
 https://www.youtube.com/watch?v=n74poysXaJM
 
-
+cd
+/home/fernando/cursos/lambdas-labs/modulos/json2html
 pip install json2html -t .
+
+
+
+
+
+
+1 - Ler(get) arquivo JSON do bucket do S3.
+2 - Converter o JSON para HTML.
+3 - Enviar(put) arquivo HTML para o bucket do S3.
+4 - Efetuar envio do arquivo HTML via email utilizando o SNS.
+
+
+
+
+# PENDENTE
+- Ver como instalar modulos do Python no AWS Lambda, para poder utilizar o json2html, por exemplo. Utilizando camadas no AWS-Lambda.
+https://www.youtube.com/watch?v=n74poysXaJM
+- Instalar o "bs4 import BeautifulSoup" também.
+- Usar o código do base8, fazer todo o processo com sumário+conversão-html.
+
