@@ -411,3 +411,16 @@ https://www.youtube.com/watch?v=n74poysXaJM
 - Ajustando SSM para EC2 ser coletada pelo Amazon Inspector
 
 https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up-ec2.html
+
+Successfully attached ec2-basico to instance i-0db6e68a367e54c2b
+
+
+
+
+22:25h
+	LINUX	
+Actively monitoring
+Resource is being continuously monitored by Inspector.
+
+
+- Verificando que a EC2 ficou OK agora, sendo coletada corretamente pelo Amazon Inspector.
