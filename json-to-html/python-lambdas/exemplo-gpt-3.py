@@ -1,6 +1,6 @@
+
 import json
 import boto3
-import json2html
 
 def lambda_handler(event, context):
     s3 = boto3.client('s3')
@@ -29,26 +29,8 @@ def lambda_handler(event, context):
         }
 
 def json_to_html(json_content):
-    # Converte o conteúdo JSON para o formato HTML utilizando a biblioteca json2html
-    table = json2html.json2html.convert(json = json.loads(json_content))
-
-    # Define o HTML completo, adicionando cabeçalho e rodapé
-    html_content = """
-    <html>
-        <head>
-            <title>Relatório JSON para HTML</title>
-        </head>
-        <body>
-            <h1>Relatório JSON para HTML</h1>
-            {}
-            <hr>
-            <p>Gerado automaticamente pela Lambda AWS</p>
-        </body>
-    </html>
-    """.format(table)
-
+    # Implementar a conversão de JSON para HTML aqui
     return html_content
-
 
 def put_html_to_s3(html_content):
     s3 = boto3.resource('s3')

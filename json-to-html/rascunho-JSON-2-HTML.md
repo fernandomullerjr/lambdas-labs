@@ -424,3 +424,148 @@ Resource is being continuously monitored by Inspector.
 
 
 - Verificando que a EC2 ficou OK agora, sendo coletada corretamente pelo Amazon Inspector.
+
+
+
+
+
+# PENDENTE
+- Ver como instalar modulos do Python no AWS Lambda, para poder utilizar o json2html, por exemplo. Utilizando camadas no AWS-Lambda.
+https://www.youtube.com/watch?v=n74poysXaJM
+- Instalar o "bs4 import BeautifulSoup" também.
+- Usar o código do base8, fazer todo o processo com sumário+conversão-html.
+
+- Stop/Start na EC2
+- Via "python-lambda22.py",   Criar script que faça:
+    1. Obtenha arquivo JSON do S3.
+    2. Converta o JSON para HTML.
+    3. Salvar o HTML no bucket do S3.
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+
+
+
+
+
+
+## GPT
+
+Para criar as funções adicionais solicitadas, você pode adaptar o código da seguinte forma:
+
+~~~~python
+
+import json
+import boto3
+
+def lambda_handler(event, context):
+    s3 = boto3.client('s3')
+    bucket_name = 'devops-luxor'
+    object_name = 'base1.json'
+    
+    try:
+        response = s3.get_object(Bucket=bucket_name, Key=object_name)
+        content = response['Body'].read()
+        
+        # Chamar a função que converte o JSON para HTML
+        html_content = json_to_html(content)
+        
+        # Chamar a função que envia o arquivo HTML para o bucket S3
+        put_html_to_s3(html_content)
+        
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'content': content.decode('utf-8')})
+        }
+    except Exception as e:
+        print(e)
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
+
+def json_to_html(json_content):
+    # Implementar a conversão de JSON para HTML aqui
+    return html_content
+
+def put_html_to_s3(html_content):
+    s3 = boto3.resource('s3')
+    bucket_name = 'devops-luxor'
+    object_name = 'relatorio-final.html'
+    
+    try:
+        s3.Bucket(bucket_name).put_object(Key=object_name, Body=html_content)
+        print("Arquivo HTML salvo com sucesso!")
+    except Exception as e:
+        print(e)
+~~~~
+
+A função json_to_html deve ser implementada para converter o conteúdo JSON obtido do bucket S3 para o formato HTML desejado. Você pode usar uma biblioteca externa, como json2html, ou implementar sua própria lógica de conversão.
+
+A função put_html_to_s3 deve ser responsável por enviar o arquivo HTML para o bucket S3 com o nome relatorio-final.html. Note que esta função usa a biblioteca boto3.resource em vez de boto3.client. Isso porque precisamos acessar o método put_object, que não está disponível no cliente S3.
+
+Para testar todas as funções ao mesmo tempo via console da AWS, basta criar um novo evento de teste e executar a função lambda_handler. Todas as funções adicionais serão chamadas dentro desta função. Certifique-se de que o bucket S3 esteja configurado corretamente e que as permissões de acesso estejam configuradas para permitir a escrita de objetos no bucket.
+
+
+
+
+
+
+Claro! Segue abaixo um exemplo completo de como implementar a função json_to_html utilizando a biblioteca json2html para converter o conteúdo JSON para o formato HTML:
+
+~~~~python
+
+import json
+import json2html
+
+def json_to_html(json_content):
+    # Converte o conteúdo JSON para o formato HTML utilizando a biblioteca json2html
+    table = json2html.json2html.convert(json = json.loads(json_content))
+
+    # Define o HTML completo, adicionando cabeçalho e rodapé
+    html_content = """
+    <html>
+        <head>
+            <title>Relatório JSON para HTML</title>
+        </head>
+        <body>
+            <h1>Relatório JSON para HTML</h1>
+            {}
+            <hr>
+            <p>Gerado automaticamente pela Lambda AWS</p>
+        </body>
+    </html>
+    """.format(table)
+
+    return html_content
+~~~~
+
+Nesse exemplo, utilizamos a biblioteca json2html para converter o conteúdo JSON para o formato HTML. O resultado da conversão é armazenado em uma variável chamada table. Em seguida, definimos o HTML completo, incluindo cabeçalho e rodapé, e usamos a variável table para inserir a tabela no corpo do documento.
+
+Lembre-se de importar a biblioteca json2html no início do arquivo para que ela seja reconhecida pela função json_to_html.
+
+
+
+
+
+
+
+## Camadas
+
+- Criando Layers no AWS Lambda
+
+json2html-camadas
+Create version
+
+    Successfully created layer json2html-camadas version 1.
+
+Version
+	
+Version ARN
+	
+Description
+1	arn:aws:lambda:us-east-1:261106957109:layer:json2html-camadas:1	Modulo json2html para usar no Python
+
+
+
