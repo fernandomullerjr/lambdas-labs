@@ -569,3 +569,148 @@ Description
 
 
 
+
+
+
+
+
+- Botão "Layers"
+    Add Layer
+    Custom Layers
+    json2html-camadas
+    Version 1
+
+
+
+- Erro ao testar Lambda24
+/home/fernando/cursos/lambdas-labs/json-to-html/python-lambdas/python-lambda24.py
+
+~~~~bash
+Test Event Name
+teste1
+
+Response
+{
+  "errorMessage": "Unable to import module 'python-lambda24': No module named 'json2html'",
+  "errorType": "Runtime.ImportModuleError",
+  "requestId": "3d8aaab7-e9ab-40ea-9cc8-f4b1f7a410b3",
+  "stackTrace": []
+}
+
+~~~~
+
+
+
+
+fiz a criação de uma camada no AWS Lambda, mas ao tentar utilizar a biblioteca json2html ocorre o erro abaixo no AWS Lambda:
+
+
+Response
+{
+  "errorMessage": "Unable to import module 'python-lambda24': No module named 'json2html'",
+  "errorType": "Runtime.ImportModuleError",
+  "requestId": "3d8aaab7-e9ab-40ea-9cc8-f4b1f7a410b3",
+  "stackTrace": []
+}
+ChatGPT
+
+Esse erro ocorre porque o pacote json2html não foi incluído na camada que você criou.
+
+Para resolver esse problema, você pode criar uma camada com o pacote json2html e incluir essa camada na sua função Lambda.
+
+Siga os passos abaixo para criar uma camada com o pacote json2html:
+
+    Crie uma nova pasta em seu computador e nomeie-a json2html-layer.
+    Dentro dessa pasta, crie outra pasta chamada python.
+    Abra um terminal na pasta python e execute o comando pip install json2html -t . Esse comando irá instalar o pacote json2html na pasta python.
+    Compacte o conteúdo da pasta json2html-layer em um arquivo zip. Certifique-se de que o arquivo zip contenha a pasta python e o pacote json2html.
+
+Com a camada json2html criada, você pode adicioná-la à sua função Lambda seguindo os passos abaixo:
+
+    Acesse o console da AWS e navegue até a página de sua função Lambda.
+    Na seção Camadas, clique em Adicionar camada.
+    Selecione Camada personalizada e faça o upload do arquivo zip da camada json2html.
+    Clique em Adicionar.
+
+Após seguir esses passos, o pacote json2html estará disponível na sua função Lambda e o erro de importação deverá ser resolvido.
+
+
+não seria pip3?
+ChatGPT
+
+Sim, você está correto. O comando correto para instalar o pacote json2html utilizando o pip3 seria pip3 install json2html -t ..
+
+Peço desculpas pela minha resposta anterior estar incorreta. É sempre importante utilizar o comando correto para evitar problemas de compatibilidade e garantir que o pacote seja instalado corretamente. Obrigado por apontar o erro!
+
+
+
+pip3 install json2html -t .
+
+
+
+
+
+
+
+
+- Criando version da Layer
+
+json2html-camadas
+Create version
+
+    Successfully created layer json2html-camadas version 2.
+
+2	arn:aws:lambda:us-east-1:261106957109:layer:json2html-camadas:2	Modulo json2html para usar no Python - usando pip3 agora
+
+
+
+
+
+
+
+
+usei o pip3 e na camada baixei o zip com este novo pacote, mas segue o erro:
+
+ "Unable to import module 'python-lambda24': No module named 'json2html'",
+ChatGPT
+
+Se você já criou uma camada com o pacote json2html e a adicionou à sua função Lambda, é possível que o erro esteja ocorrendo por um dos seguintes motivos:
+
+    O nome da camada ou da função não está correto: verifique se o nome da camada e o nome da função estão digitados corretamente e que estão em conformidade com o que foi especificado na configuração da camada e da função Lambda.
+
+    A camada foi adicionada a uma região diferente da região onde a função Lambda está localizada: verifique se a camada foi adicionada à mesma região da função Lambda.
+
+    A versão da camada não está correta: verifique se a versão da camada que foi adicionada à função Lambda está correta e é compatível com a versão da linguagem que a função Lambda está usando.
+
+    A camada não está sendo acessada corretamente pela função Lambda: verifique se o caminho do pacote json2html está correto e que ele está sendo importado corretamente na sua função Lambda.
+
+Tente verificar se algum desses pontos pode estar causando o erro e faça os ajustes necessários. Se ainda assim o erro persistir, tente criar uma nova camada com o pacote json2html e adicioná-la à sua função Lambda.
+
+
+
+
+
+
+
+
+
+
+
+3	arn:aws:lambda:us-east-1:261106957109:layer:json2html-camadas:3	Modulo json2html para usar no Python - usando pip3 E mudando ordem das pastas
+
+
+
+
+- Resolvido
+
+Test Event Name
+teste1
+
+~~~~json
+Response
+{
+  "statusCode": 200,
+  "body": "{\"content\": \"{\\n    \\\"findings\\\": [\\n        {\\n            \\\"awsAccountId\\\": \\\"814635504079\\\",\\n            \\\"description\\\": \\\" Heap-based Buffer Overflow in GitHub repository vim/vim prior to 9.0.1376.\\\",\\n            \\\"exploitAvailable\\\": \\\"NO\\\",\\n            \\\"findingArn\\\": \\\"arn:aws:inspector2:sa-east-1:814635504079:finding/0013598e4e083e9999d68962dd571249\\\",\\n            \\\"firstObservedAt\\\": \\\"2023-05-04T14:15:25.841Z\\\",\\n            \\\"fixAvailable\\\": \\\"YES\\\",\\n            \\\"lastObservedAt\\\": \\\"2023-05-04T14:15:25.841Z\\\",\\n            \\\"packageVulnerabilityDetails\\\": {\\n                \\\"cvss\\\": [\\n                    {\\n                        \\\"baseScore\\\": 6.6,\\n                        \\\"scoringVector\\\": \\\"CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:H\\\",\\n                        \\\"source\\\": \\\"NVD\\\",\\n                        \\\"version\\\": \\\"3.1\\\"\\n                    }\\n                ],\\n                \\\"referenceUrls\\\": [\\n                    \\\"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-1170\\\",\\n                    \\\"https://ubuntu.com/security/notices/USN-5963-1\\\"\\n                ],\\n                \\\"relatedVulnerabilities\\\": [],\\n                \\\"source\\\": \\\"UBUNTU_CVE\\\",\\n                \\\"sourceUrl\\\": \\\"https://people.canonical.com/~ubuntu-security/cve/2023/CVE-2023-1170.html\\\",\\n                \\\"vendorCreatedAt\\\": \\\"2023-03-03T23:15:00Z\\\",\\n                \\\"vendorSeverity\\\": \\\"medium\\\",\\n                \\\"vulnerabilityId\\\": \\\"CVE-2023-1170\\\",\\n                \\\"vulnerablePackages\\\": [\\n                    {\\n                        \\\"arch\\\": \\\"X86_64\\\",\\n                        \\\"epoch\\\": 2,\\n                        \\\"fixedInVersion\\\": \\\"2:8.1.2269-1ubuntu5.12\\\",\\n                        \\\"name\\\": \\\"vim\\\",\\n                        \\\"packageManager\\\": \\\"OS\\\",\\n                        \\\"release\\\": \\\"1ubuntu5.9\\\",\\n                        \\\"remediation\\\": \\\"apt update && apt install --only-upgrade vim\\\",\\n                        \\\"version\\\": \\\"8.1.2269\\\"\\n                    },\\n                    {\\n                        \\\"arch\\\": \\\"X86_64\\\",\\n                        \\\"epoch\\\": 2,\\n                        \\\"fixedInVersion\\\": \\\"2:8.1.2269-1ubuntu5.12\\\",\\n                        \\\"name\\\": \\\"vim-tiny\\\",\\n                        \\\"packageManager\\\": \\\"OS\\\",\\n                        \\\"release\\\": \\\"1ubuntu5.9\\\",\\n                        \\\"remediation\\\": \\\"apt update && apt install --only-upgrade vim-tiny\\\",\\n                        \\\"version\\\": \\\"8.1.2269\\\"\\n                    }\\n                ]\\n            },\\n            \\\"remediation\\\": {\\n                \\\"recommendation\\\": {\\n                    \\\"text\\\": \\\"None Provided\\\"\\n                }\\n            },\\n            \\\"resources\\\": [\\n                {\\n                    \\\"details\\\": {\\n                        \\\"awsEc2Instance\\\": {\\n                            \\\"iamInstanceProfileArn\\\": \\\"arn:aws:iam::814635504079:instance-profile/RunCommand\\\",\\n                            \\\"imageId\\\": \\\"ami-06e297f909059c171\\\",\\n                            \\\"ipV4Addresses\\\": [\\n                                \\\"172.30.4.168\\\"\\n                            ],\\n                            \\\"ipV6Addresses\\\": [],\\n                            \\\"keyName\\\": \\\"appmax-21-08-2018-0\\\",\\n                            \\\"launchedAt\\\": \\\"2023-05-04T14:13:47Z\\\",\\n                            \\\"platform\\\": \\\"UBUNTU_20_04\\\",\\n                            \\\"subnetId\\\": \\\"subnet-0aa87558d279ec9b4\\\",\\n                            \\\"type\\\": \\\"c5.4xlarge\\\",\\n                            \\\"vpcId\\\": \\\"vpc-91831ff4\\\"\\n                        }\\n                    },\\n                    \\\"id\\\": \\\"i-0415ee9c35d4406ef\\\",\\n                    \\\"partition\\\": \\\"aws\\\",\\n                    \\\"region\\\": \\\"sa-east-1\\\",\\n                    \\\"tags\\\": {\\n                        \\\"aws:autoscaling:groupName\\\": \\\"appmax-asg-php-7-requisicoes\\\",\\n                        \\\"aws:ec2:fleet-id\\\": \\\"fleet-2d8e1d2f-f834-6bbe-2e18-84a8a3ec40b1\\\",\\n                        \\\"DevOpsRelatorioAmazonInspector\\\": \\\"1\\\",\\n                        \\\"Billing\\\": \\\"arquitetura\\\",\\n                        \\\"Ambiente\\\": \\\"appmax-prod-php-7-requisicoes\\\",\\n                        \\\"aws:ec2launchtemplate:version\\\": \\\"26\\\",\\n                        \\\"aws:ec2launchtemplate:id\\\": \\\"lt-09332363f4cb896d3\\\",\\n                        \\\"syncuser\\\": \\\"on\\\",\\n                        \\\"Name\\\": \\\"[Appmax] AutoScaling-PHP-7-requisicoes\\\"\\n                    },\\n                    \\\"type\\\": \\\"AWS_EC2_INSTANCE\\\"\\n                }\\n            ],\\n            \\\"severity\\\": \\\"MEDIUM\\\",\\n            \\\"status\\\": \\\"ACTIVE\\\",\\n            \\\"title\\\": \\\"CVE-2023-1170 - vim, vim-tiny\\\",\\n            \\\"type\\\": \\\"PACKAGE_VULNERABILITY\\\",\\n            \\\"updatedAt\\\": \\\"2023-05-04T14:15:25.841Z\\\"\\n        },\\n        {\\n            \\\"awsAccountId\\\": \\\"814635504079\\\",\\n            \\\"description\\\": \\\" Stack-based Buffer Overflow in GitHub repository vim/vim prior to 9.0.\\\",\\n            \\\"exploitAvailable\\\": \\\"NO\\\",\\n            \\\"findingArn\\\": \\\"arn:aws:inspector2:sa-east-1:814635504079:finding/ff52658379d87f999c4359cc123f4732\\\",\\n            \\\"firstObservedAt\\\": \\\"2023-05-04T14:17:08.924Z\\\",\\n            \\\"fixAvailable\\\": \\\"YES\\\",\\n            \\\"lastObservedAt\\\": \\\"2023-05-04T14:17:08.924Z\\\",\\n            \\\"packageVulnerabilityDetails\\\": {\\n                \\\"cvss\\\": [\\n                    {\\n                        \\\"baseScore\\\": 6.8,\\n                        \\\"scoringVector\\\": \\\"AV:N/AC:M/Au:N/C:P/I:P/A:P\\\",\\n                        \\\"source\\\": \\\"NVD\\\",\\n                        \\\"version\\\": \\\"2.0\\\"\\n                    },\\n                    {\\n                        \\\"baseScore\\\": 7.8,\\n                        \\\"scoringVector\\\": \\\"CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H\\\",\\n                        \\\"source\\\": \\\"NVD\\\",\\n                        \\\"version\\\": \\\"3.1\\\"\\n                    }\\n                ],\\n                \\\"referenceUrls\\\": [\\n                    \\\"https://ubuntu.com/security/notices/USN-5723-1\\\",\\n                    \\\"https://ubuntu.com/security/notices/USN-5995-1\\\",\\n                    \\\"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-2304\\\"\\n                ],\\n                \\\"relatedVulnerabilities\\\": [],\\n                \\\"source\\\": \\\"UBUNTU_CVE\\\",\\n                \\\"sourceUrl\\\": \\\"https://people.canonical.com/~ubuntu-security/cve/2022/CVE-2022-2304.html\\\",\\n                \\\"vendorCreatedAt\\\": \\\"2022-07-05T13:15:00Z\\\",\\n                \\\"vendorSeverity\\\": \\\"medium\\\",\\n                \\\"vulnerabilityId\\\": \\\"CVE-2022-2304\\\",\\n                \\\"vulnerablePackages\\\": [\\n                    {\\n                        \\\"arch\\\": \\\"X86_64\\\",\\n                        \\\"epoch\\\": 2,\\n                        \\\"fixedInVersion\\\": \\\"2:8.1.2269-1ubuntu5.13\\\",\\n                        \\\"name\\\": \\\"vim\\\",\\n                        \\\"packageManager\\\": \\\"OS\\\",\\n                        \\\"release\\\": \\\"1ubuntu5.9\\\",\\n                        \\\"remediation\\\": \\\"apt update && apt install --only-upgrade vim\\\",\\n                        \\\"version\\\": \\\"8.1.2269\\\"\\n                    },\\n                    {\\n                        \\\"arch\\\": \\\"X86_64\\\",\\n                        \\\"epoch\\\": 2,\\n                        \\\"fixedInVersion\\\": \\\"2:8.1.2269-1ubuntu5.13\\\",\\n                        \\\"name\\\": \\\"vim-tiny\\\",\\n                        \\\"packageManager\\\": \\\"OS\\\",\\n                        \\\"release\\\": \\\"1ubuntu5.9\\\",\\n                        \\\"remediation\\\": \\\"apt update && apt install --only-upgrade vim-tiny\\\",\\n                        \\\"version\\\": \\\"8.1.2269\\\"\\n                    }\\n                ]\\n            },\\n            \\\"remediation\\\": {\\n                \\\"recommendation\\\": {\\n                    \\\"text\\\": \\\"None Provided\\\"\\n                }\\n            },\\n            \\\"resources\\\": [\\n                {\\n                    \\\"details\\\": {\\n                        \\\"awsEc2Instance\\\": {\\n                            \\\"iamInstanceProfileArn\\\": \\\"arn:aws:iam::814635504079:instance-profile/RunCommand\\\",\\n                            \\\"imageId\\\": \\\"ami-0e24bad02f0872194\\\",\\n                            \\\"ipV4Addresses\\\": [\\n                                \\\"172.30.4.98\\\"\\n                            ],\\n                            \\\"ipV6Addresses\\\": [],\\n                            \\\"keyName\\\": \\\"appmax-21-08-2018-0\\\",\\n                            \\\"launchedAt\\\": \\\"2023-05-04T14:15:42Z\\\",\\n                            \\\"platform\\\": \\\"UBUNTU_20_04\\\",\\n                            \\\"subnetId\\\": \\\"subnet-0aa87558d279ec9b4\\\",\\n                            \\\"type\\\": \\\"r5a.large\\\",\\n                            \\\"vpcId\\\": \\\"vpc-91831ff4\\\"\\n                        }\\n                    },\\n                    \\\"id\\\": \\\"i-06b2f79a29da7746b\\\",\\n                    \\\"partition\\\": \\\"aws\\\",\\n                    \\\"region\\\": \\\"sa-east-1\\\",\\n                    \\\"tags\\\": {\\n                        \\\"aws:autoscaling:groupName\\\": \\\"appmax-asg-php-7-queue\\\",\\n                        \\\"aws:ec2:fleet-id\\\": \\\"fleet-8f9d3e05-228d-ee3c-2412-0f28fed3ebd0\\\",\\n                        \\\"DevOpsRelatorioAmazonInspector\\\": \\\"1\\\",\\n                        \\\"Billing\\\": \\\"arquitetura\\\",\\n                        \\\"amb\\\": \\\"appmax-queue\\\",\\n                        \\\"Ambiente\\\": \\\"appmax-queue\\\",\\n                        \\\"aws:ec2launchtemplate:version\\\": \\\"35\\\",\\n                        \\\"aws:ec2launchtemplate:id\\\": \\\"lt-092969c05aca14fee\\\",\\n                        \\\"syncuser\\\": \\\"on\\\",\\n                        \\\"Name\\\": \\\"[AppMax] Auto-Scaling-QUEUE-Supervisor-PHP-7\\\"\\n                    },\\n                    \\\"type\\\": \\\"AWS_EC2_INSTANCE\\\"\\n                }\\n            ],\\n            \\\"severity\\\": \\\"MEDIUM\\\",\\n            \\\"status\\\": \\\"ACTIVE\\\",\\n            \\\"title\\\": \\\"CVE-2022-2304 - vim, vim-tiny\\\",\\n            \\\"type\\\": \\\"PACKAGE_VULNERABILITY\\\",\\n            \\\"updatedAt\\\": \\\"2023-05-04T14:17:08.924Z\\\"\\n        },\\n        {\\n            \\\"awsAccountId\\\": \\\"814635504079\\\",\\n            \\\"description\\\": \\\" A flaw was found in ImageMagick. The vulnerability occurs due to improper use of open functions and leads to a denial of service. This flaw allows an attacker to crash the system.\\\",\\n            \\\"exploitAvailable\\\": \\\"NO\\\",\\n            \\\"findingArn\\\": \\\"arn:aws:inspector2:sa-east-1:814635504079:finding/ffabf790e5ec1051b86a32c3a9b230d5\\\",\\n            \\\"firstObservedAt\\\": \\\"2023-05-04T14:22:20.468Z\\\",\\n            \\\"fixAvailable\\\": \\\"YES\\\",\\n            \\\"lastObservedAt\\\": \\\"2023-05-04T14:22:20.468Z\\\",\\n            \\\"packageVulnerabilityDetails\\\": {\\n                \\\"cvss\\\": [\\n                    {\\n                        \\\"baseScore\\\": 4.3,\\n                        \\\"scoringVector\\\": \\\"AV:N/AC:M/Au:N/C:N/I:N/A:P\\\",\\n                        \\\"source\\\": \\\"NVD\\\",\\n                        \\\"version\\\": \\\"2.0\\\"\\n                    },\\n                    {\\n                        \\\"baseScore\\\": 5.5,\\n                        \\\"scoringVector\\\": \\\"CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H\\\",\\n                        \\\"source\\\": \\\"NVD\\\",\\n                        \\\"version\\\": \\\"3.1\\\"\\n                    }\\n                ],\\n                \\\"referenceUrls\\\": [\\n                    \\\"https://ubuntu.com/security/notices/USN-5736-2\\\",\\n                    \\\"https://ubuntu.com/security/notices/USN-5736-1\\\",\\n                    \\\"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-4219\\\"\\n                ],\\n                \\\"relatedVulnerabilities\\\": [],\\n                \\\"source\\\": \\\"UBUNTU_CVE\\\",\\n                \\\"sourceUrl\\\": \\\"https://people.canonical.com/~ubuntu-security/cve/2021/CVE-2021-4219.html\\\",\\n                \\\"vendorCreatedAt\\\": \\\"2022-03-23T20:15:00Z\\\",\\n                \\\"vendorSeverity\\\": \\\"low\\\",\\n                \\\"vulnerabilityId\\\": \\\"CVE-2021-4219\\\",\\n                \\\"vulnerablePackages\\\": [\\n                    {\\n                        \\\"arch\\\": \\\"X86_64\\\",\\n                        \\\"epoch\\\": 8,\\n                        \\\"fixedInVersion\\\": \\\"8:6.9.10.23+dfsg-2.1ubuntu11.4+esm1\\\",\\n                        \\\"name\\\": \\\"libmagickcore-6.q16-6\\\",\\n                        \\\"packageManager\\\": \\\"OS\\\",\\n                        \\\"release\\\": \\\"2.1ubuntu11.4\\\",\\n                        \\\"remediation\\\": \\\"apt update && apt install --only-upgrade libmagickcore-6.q16-6\\\",\\n                        \\\"version\\\": \\\"6.9.10.23+dfsg\\\"\\n                    },\\n                    {\\n                        \\\"arch\\\": \\\"X86_64\\\",\\n                        \\\"epoch\\\": 8,\\n                        \\\"fixedInVersion\\\": \\\"8:6.9.10.23+dfsg-2.1ubuntu11.4+esm1\\\",\\n                        \\\"name\\\": \\\"libmagickwand-6.q16-6\\\",\\n                        \\\"packageManager\\\": \\\"OS\\\",\\n                        \\\"release\\\": \\\"2.1ubuntu11.4\\\",\\n                        \\\"remediation\\\": \\\"apt update && apt install --only-upgrade libmagickwand-6.q16-6\\\",\\n                        \\\"version\\\": \\\"6.9.10.23+dfsg\\\"\\n                    },\\n                    {\\n                        \\\"arch\\\": \\\"X86_64\\\",\\n                        \\\"epoch\\\": 8,\\n                        \\\"fixedInVersion\\\": \\\"8:6.9.10.23+dfsg-2.1ubuntu11.4+esm1\\\",\\n                        \\\"name\\\": \\\"imagemagick-6.q16\\\",\\n                        \\\"packageManager\\\": \\\"OS\\\",\\n                        \\\"release\\\": \\\"2.1ubuntu11.4\\\",\\n                        \\\"remediation\\\": \\\"apt update && apt install --only-upgrade imagemagick-6.q16\\\",\\n                        \\\"version\\\": \\\"6.9.10.23+dfsg\\\"\\n                    },\\n                    {\\n                        \\\"arch\\\": \\\"X86_64\\\",\\n                        \\\"epoch\\\": 8,\\n                        \\\"fixedInVersion\\\": \\\"8:6.9.10.23+dfsg-2.1ubuntu11.4+esm1\\\",\\n                        \\\"name\\\": \\\"libmagickcore-6.q16-6-extra\\\",\\n                        \\\"packageManager\\\": \\\"OS\\\",\\n                        \\\"release\\\": \\\"2.1ubuntu11.4\\\",\\n                        \\\"remediation\\\": \\\"apt update && apt install --only-upgrade libmagickcore-6.q16-6-extra\\\",\\n                        \\\"version\\\": \\\"6.9.10.23+dfsg\\\"\\n                    },\\n                    {\\n                        \\\"arch\\\": \\\"X86_64\\\",\\n                        \\\"epoch\\\": 8,\\n                        \\\"fixedInVersion\\\": \\\"8:6.9.10.23+dfsg-2.1ubuntu11.4+esm1\\\",\\n                        \\\"name\\\": \\\"imagemagick\\\",\\n                        \\\"packageManager\\\": \\\"OS\\\",\\n                        \\\"release\\\": \\\"2.1ubuntu11.4\\\",\\n                        \\\"remediation\\\": \\\"apt update && apt install --only-upgrade imagemagick\\\",\\n                        \\\"version\\\": \\\"6.9.10.23+dfsg\\\"\\n                    }\\n                ]\\n            },\\n            \\\"remediation\\\": {\\n                \\\"recommendation\\\": {\\n                    \\\"text\\\": \\\"None Provided\\\"\\n                }\\n            },\\n            \\\"resources\\\": [\\n                {\\n                    \\\"details\\\": {\\n                        \\\"awsEc2Instance\\\": {\\n                            \\\"iamInstanceProfileArn\\\": \\\"arn:aws:iam::814635504079:instance-profile/RunCommand\\\",\\n                            \\\"imageId\\\": \\\"ami-0e24bad02f0872194\\\",\\n                            \\\"ipV4Addresses\\\": [\\n                                \\\"172.30.4.153\\\"\\n                            ],\\n                            \\\"ipV6Addresses\\\": [],\\n                            \\\"keyName\\\": \\\"appmax-21-08-2018-0\\\",\\n                            \\\"launchedAt\\\": \\\"2023-05-04T14:21:03Z\\\",\\n                            \\\"platform\\\": \\\"UBUNTU_20_04\\\",\\n                            \\\"subnetId\\\": \\\"subnet-0aa87558d279ec9b4\\\",\\n                            \\\"type\\\": \\\"m5a.xlarge\\\",\\n                            \\\"vpcId\\\": \\\"vpc-91831ff4\\\"\\n                        }\\n                    },\\n                    \\\"id\\\": \\\"i-04e668b1627742918\\\",\\n                    \\\"partition\\\": \\\"aws\\\",\\n                    \\\"region\\\": \\\"sa-east-1\\\",\\n                    \\\"tags\\\": {\\n                        \\\"aws:autoscaling:groupName\\\": \\\"appmax-asg-php-7-queue\\\",\\n                        \\\"aws:ec2:fleet-id\\\": \\\"fleet-399fa816-9527-468f-2698-092241c447ea\\\",\\n                        \\\"DevOpsRelatorioAmazonInspector\\\": \\\"1\\\",\\n                        \\\"Billing\\\": \\\"arquitetura\\\",\\n                        \\\"amb\\\": \\\"appmax-queue\\\",\\n                        \\\"Ambiente\\\": \\\"appmax-queue\\\",\\n                        \\\"aws:ec2launchtemplate:version\\\": \\\"35\\\",\\n                        \\\"aws:ec2launchtemplate:id\\\": \\\"lt-092969c05aca14fee\\\",\\n                        \\\"syncuser\\\": \\\"on\\\",\\n                        \\\"Name\\\": \\\"[AppMax] Auto-Scaling-QUEUE-Supervisor-PHP-7\\\"\\n                    },\\n                    \\\"type\\\": \\\"AWS_EC2_INSTANCE\\\"\\n                }\\n            ],\\n            \\\"severity\\\": \\\"LOW\\\",\\n            \\\"status\\\": \\\"ACTIVE\\\",\\n            \\\"title\\\": \\\"CVE-2021-4219 - libmagickcore-6.q16-6, libmagickwand-6.q16-6 and 3 more\\\",\\n            \\\"type\\\": \\\"PACKAGE_VULNERABILITY\\\",\\n            \\\"updatedAt\\\": \\\"2023-05-04T14:22:20.468Z\\\"\\n        }\\n    ]\\n}\"}"
+}
+
+~~~~
