@@ -1,8 +1,10 @@
 
 
+- Tutorial de base:
+https://www.youtube.com/watch?v=n74poysXaJM
+
 
 - Num terminal, instalar o módulo desejado numa pasta
-
 pip3 install json2html -t .
 
 

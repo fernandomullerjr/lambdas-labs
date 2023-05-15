@@ -693,15 +693,17 @@ Tente verificar se algum desses pontos pode estar causando o erro e faça os aju
 
 
 
-
-
-
+- Criada uma terceira camada para Lambda
 3	arn:aws:lambda:us-east-1:261106957109:layer:json2html-camadas:3	Modulo json2html para usar no Python - usando pip3 E mudando ordem das pastas
 
-
-
+- Testando:
+/home/fernando/cursos/lambdas-labs/json-to-html/python-lambdas/python-lambda24.py
 
 - Resolvido
+importou o módulo json2html com sucesso!
+importou o módulo json2html com sucesso!
+importou o módulo json2html com sucesso!
+importou o módulo json2html com sucesso!
 
 Test Event Name
 teste1
@@ -714,3 +716,35 @@ Response
 }
 
 ~~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# PENDENTE
+- Instalar o "bs4 import BeautifulSoup" também, se necessário.
+- Criar nova versão, fazendo com que o JSON convertido no HTML tenha sumários, resumo, melhor organização, etc. Separar por instance-id as findings???
+- Separar por instance-id as findings???
+- Usar o código do base8, fazer todo o processo com sumário+conversão-html.
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
