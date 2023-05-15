@@ -722,7 +722,8 @@ Response
 
 
 
-
+- Arquivo HTML que foi enviado ao S3, baixado:
+file:///D:/OneDrive/Documents/Dev/Python/Lambdas/scan-interno-alternativa/reports-amazon-inspector/Python-testes/relatorio-final.html
 
 
 
@@ -742,6 +743,278 @@ Response
 - Instalar o "bs4 import BeautifulSoup" também, se necessário.
 - Criar nova versão, fazendo com que o JSON convertido no HTML tenha sumários, resumo, melhor organização, etc. Separar por instance-id as findings???
 - Separar por instance-id as findings???
+- Usar o código do base8, fazer todo o processo com sumário+conversão-html.
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Para adaptar a função json_to_html em Python para fazer um sumário contendo os totais de findings por severity e vendorSeverity, podemos fazer o seguinte:
+
+    Converter o conteúdo JSON para um dicionário Python.
+    Criar um dicionário vazio para armazenar o sumário dos findings por severity e vendorSeverity.
+    Iterar sobre cada finding no JSON e incrementar o contador correspondente no dicionário de sumário.
+    Adicionar uma tabela HTML ao corpo do documento que exibe o sumário.
+    Atualizar a tabela principal para incluir um link para a tabela de sumário.
+
+Segue abaixo o código atualizado da função:
+
+~~~~python
+
+def json_to_html(json_content):
+    # Converte o conteúdo JSON para um dicionário Python
+    data = json.loads(json_content)
+
+    # Define o HTML completo, adicionando cabeçalho e rodapé
+    html_content = """
+    <html>
+        <head>
+            <title>Relatório JSON para HTML</title>
+        </head>
+        <body>
+            <h1>Relatório JSON para HTML</h1>
+            {}
+            <hr>
+            <h2>Sumário de Findings</h2>
+            {}
+            <p>Gerado automaticamente pela Lambda AWS</p>
+        </body>
+    </html>
+    """
+
+    # Cria um dicionário para armazenar o sumário
+    summary = {"total": 0, "severity": {}, "vendorSeverity": {}}
+
+    # Itera sobre cada finding no JSON e atualiza o sumário
+    for finding in data["findings"]:
+        summary["total"] += 1
+        severity = finding["severity"]
+        summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+        vendor_severity = finding["packageVulnerabilityDetails"]["vendorSeverity"]
+        summary["vendorSeverity"][vendor_severity] = summary["vendorSeverity"].get(vendor_severity, 0) + 1
+
+    # Cria a tabela de sumário
+    summary_table = "<table><tr><th></th><th>Total</th></tr>"
+    for severity, count in summary["severity"].items():
+        summary_table += "<tr><td>Severity {}</td><td>{}</td></tr>".format(severity, count)
+    for vendor_severity, count in summary["vendorSeverity"].items():
+        summary_table += "<tr><td>Vendor Severity {}</td><td>{}</td></tr>".format(vendor_severity, count)
+    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+
+    # Cria a tabela principal
+    main_table = json2html.json2html.convert(json=data, table_attributes="id=\"findings_table\"")
+
+    # Adiciona um link para a tabela de sumário
+    main_table = main_table.replace("<body>", "<body><p><a href=\"#summary_table\">Ver Sumário de Findings</a></p>")
+
+    # Insere as tabelas no HTML completo e retorna o resultado
+    return html_content.format(main_table, summary_table)
+~~~~
+
+Agora, quando chamamos a função json_to_html com um JSON de findings, ela retorna um HTML que contém a tabela principal e um sumário de findings por severity e vendorSeverity. O sumário é exibido em uma tabela separada abaixo da tabela principal, e inclui o número
+
+
+
+
+
+
+
+
+
+- Testando
+
+- Trouxe
+
+Sumário de Findings
+	Total
+Severity MEDIUM	2
+Severity LOW	1
+Vendor Severity medium	2
+Vendor Severity low	1
+Total	3
+
+Gerado automaticamente pela Lambda AWS
+
+
+
+
+
+
+
+## GPT
+
+quero o mesmo código, só que sem os "Vendor Severity", além disto, preciso que verifique porque a tabela do HTML ficou sem bordas e formatação
+ChatGPT
+
+Claro, aqui está o código sem a coluna "Vendor Severity":
+
+python
+
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+
+url = 'https://nvd.nist.gov/vuln/search/results?adv_search=false&form_type=Basic&results_type=overview&query=cveId%3DCVE-2021-34527&search_type=all'
+
+html = requests.get(url).content
+soup = BeautifulSoup(html, "html.parser")
+
+table = soup.find('table', {'data-testid': 'vuln-results-table'})
+rows = table.find_all('tr')
+
+data = []
+for row in rows[1:]:
+    cols = row.find_all('td')
+    cols = [col.text.strip() for col in cols]
+    data.append(cols)
+
+df = pd.DataFrame(data, columns=['CVE ID', 'Description', 'CVSS Score', 'Attack Vector', 'Attack Complexity', 'Privileges Required', 'User Interaction', 'Scope', 'Confidentiality', 'Integrity', 'Availability'])
+
+print(df)
+
+Quanto à tabela do HTML sem bordas e formatação, isso pode acontecer se as informações de estilo CSS não forem incluídas na resposta da solicitação. Você pode tentar usar a biblioteca lxml para analisar a resposta em vez do html.parser padrão do Python. Aqui está o código modificado que usa a biblioteca lxml:
+
+python
+
+import pandas as pd
+import requests
+from lxml import html
+
+url = 'https://nvd.nist.gov/vuln/search/results?adv_search=false&form_type=Basic&results_type=overview&query=cveId%3DCVE-2021-34527&search_type=all'
+
+html = requests.get(url).content
+soup = html.fromstring(html)
+
+table = soup.xpath('//table[@data-testid="vuln-results-table"]')[0]
+rows = table.xpath('.//tr')
+
+data = []
+for row in rows[1:]:
+    cols = row.xpath('.//td/text()')
+    cols = [col.strip() for col in cols]
+    data.append(cols)
+
+df = pd.DataFrame(data, columns=['CVE ID', 'Description', 'CVSS Score', 'Attack Vector', 'Attack Complexity', 'Privileges Required', 'User Interaction', 'Scope', 'Confidentiality', 'Integrity', 'Availability'])
+
+print(df)
+
+Este código usa o método xpath do objeto lxml.html.HtmlElement para procurar a tabela com o atributo data-testid específico e seus filhos tr. Em seguida, ele usa o método xpath novamente para procurar os filhos td de cada tr. O restante do código é idêntico ao código original.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## GPT
+
+Claro! Aqui está a versão atualizada da função json_to_html que não inclui a coluna "Vendor Severity" e adiciona bordas à tabela:
+
+python
+
+def json_to_html(json_content):
+    # Converte o conteúdo JSON para um dicionário Python
+    data = json.loads(json_content)
+
+    # Define o HTML completo, adicionando cabeçalho e rodapé
+    html_content = """
+    <html>
+        <head>
+            <title>Relatório JSON para HTML</title>
+            <style>
+                table, th, td {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                    padding: 5px;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Relatório JSON para HTML</h1>
+            {}
+            <hr>
+            <h2>Sumário de Findings</h2>
+            {}
+            <p>Gerado automaticamente pela Lambda AWS</p>
+        </body>
+    </html>
+    """
+
+    # Cria um dicionário para armazenar o sumário
+    summary = {"total": 0, "severity": {}}
+
+    # Itera sobre cada finding no JSON e atualiza o sumário
+    for finding in data["findings"]:
+        summary["total"] += 1
+        severity = finding["severity"]
+        summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+
+    # Cria a tabela de sumário
+    summary_table = "<table><tr><th>Severity</th><th>Total</th></tr>"
+    for severity, count in summary["severity"].items():
+        summary_table += "<tr><td>{}</td><td>{}</td></tr>".format(severity, count)
+    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+
+    # Cria a tabela principal
+    main_table = json2html.json2html.convert(json=data, table_attributes="id=\"findings_table\"")
+
+    # Adiciona um link para a tabela de sumário
+    main_table = main_table.replace("<body>", "<body><p><a href=\"#summary_table\">Ver Sumário de Findings</a></p>")
+
+    # Insere as tabelas no HTML completo e retorna o resultado
+    return html_content.format(main_table, summary_table)
+
+As alterações foram as seguintes:
+
+    Removemos a linha summary = {"total": 0, "severity": {}, "vendorSeverity": {}} e atualizamos a linha 18 para summary = {"total": 0, "severity": {}}, já que não estamos mais rastreando a "Vendor Severity".
+    Na linha 25, atualizamos summary_table = "<table><tr><th></th><th>Total</th></tr>" para summary_table = "<table><tr><th>Severity</th><th>Total</th></tr>" para refletir as mudanças na estrutura da tabela de resumo.
+    Na linha 27, atualizamos for vendor_severity, count in summary["vendorSeverity"].items(): para for severity, count in summary["severity"].items(): para refletir as mudanças no dicionário "summary".
+    Na linha 29, atualizamos summary_table += "<tr><td>Vendor Severity {}</td><td>{}</td></tr>".format(vendor_severity, count) para `summary_table += "<tr><td>{}</td><td>{
+
+
+
+
+
+
+
+
+# PENDENTE
+- Criar v26 e validar o ultimo GPT.
+- Criar nova versão, fazendo com que o JSON convertido no HTML tenha sumários, resumo, melhor organização, etc. Separar por instance-id as findings???
+- Separar por instance-id as findings???
+- Instalar o "bs4 import BeautifulSoup" também, se necessário.
 - Usar o código do base8, fazer todo o processo com sumário+conversão-html.
 - Stop/Start na EC2
 - Devolver ip elástico da EC2.
