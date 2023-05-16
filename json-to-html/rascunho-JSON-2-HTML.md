@@ -1038,3 +1038,13 @@ As alterações foram as seguintes:
 # ###############################################################################################################################################################
 # 
 # Dia 15/05/2023
+
+
+
+git status
+eval $(ssh-agent -s)
+ssh-add /home/fernando/.ssh/chave-debian10-github
+git add .
+git commit -m "Lambda Labs - JSON 2 HTML, Lambda26"
+git push
+git status
