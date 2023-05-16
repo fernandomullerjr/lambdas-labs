@@ -864,7 +864,7 @@ ChatGPT
 
 Claro, aqui está o código sem a coluna "Vendor Severity":
 
-python
+~~~~python
 
 import pandas as pd
 import requests
@@ -913,6 +913,7 @@ for row in rows[1:]:
 df = pd.DataFrame(data, columns=['CVE ID', 'Description', 'CVSS Score', 'Attack Vector', 'Attack Complexity', 'Privileges Required', 'User Interaction', 'Scope', 'Confidentiality', 'Integrity', 'Availability'])
 
 print(df)
+~~~~
 
 Este código usa o método xpath do objeto lxml.html.HtmlElement para procurar a tabela com o atributo data-testid específico e seus filhos tr. Em seguida, ele usa o método xpath novamente para procurar os filhos td de cada tr. O restante do código é idêntico ao código original.
 
@@ -942,7 +943,7 @@ Este código usa o método xpath do objeto lxml.html.HtmlElement para procurar a
 
 Claro! Aqui está a versão atualizada da função json_to_html que não inclui a coluna "Vendor Severity" e adiciona bordas à tabela:
 
-python
+~~~~python
 
 def json_to_html(json_content):
     # Converte o conteúdo JSON para um dicionário Python
@@ -995,6 +996,7 @@ def json_to_html(json_content):
 
     # Insere as tabelas no HTML completo e retorna o resultado
     return html_content.format(main_table, summary_table)
+~~~~
 
 As alterações foram as seguintes:
 
@@ -1048,3 +1050,34 @@ git add .
 git commit -m "Lambda Labs - JSON 2 HTML, Lambda26"
 git push
 git status
+
+
+- Novo teste
+/home/fernando/cursos/lambdas-labs/json-to-html/python-lambdas/python-lambda26.py
+
+
+
+
+- ERRO
+
+~~~~bash
+Test Event Name
+teste1
+
+Response
+{
+  "statusCode": 500,
+  "body": "{\"error\": \"'\\\\n                    border'\"}"
+}
+
+Function Logs
+START RequestId: 97bc6385-8889-46d5-9404-cd25bdd4568a Version: $LATEST
+'\n                    border'
+END RequestId: 97bc6385-8889-46d5-9404-cd25bdd4568a
+REPORT RequestId: 97bc6385-8889-46d5-9404-cd25bdd4568a	Duration: 2763.12 ms	Billed Duration: 2764 ms	Memory Size: 128 MB	Max Memory Used: 79 MB	Init Duration: 312.07 ms
+
+Request ID
+97bc6385-8889-46d5-9404-cd25bdd4568a
+~~~~
+
+

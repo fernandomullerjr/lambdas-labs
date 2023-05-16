@@ -37,6 +37,13 @@ def json_to_html(json_content):
     <html>
         <head>
             <title>Relatório JSON para HTML</title>
+            <style>
+                table, th, td {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                    padding: 5px;
+                }
+            </style>
         </head>
         <body>
             <h1>Relatório JSON para HTML</h1>
@@ -50,22 +57,18 @@ def json_to_html(json_content):
     """
 
     # Cria um dicionário para armazenar o sumário
-    summary = {"total": 0, "severity": {}, "vendorSeverity": {}}
+    summary = {"total": 0, "severity": {}}
 
     # Itera sobre cada finding no JSON e atualiza o sumário
     for finding in data["findings"]:
         summary["total"] += 1
         severity = finding["severity"]
         summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
-        vendor_severity = finding["packageVulnerabilityDetails"]["vendorSeverity"]
-        summary["vendorSeverity"][vendor_severity] = summary["vendorSeverity"].get(vendor_severity, 0) + 1
 
     # Cria a tabela de sumário
-    summary_table = "<table><tr><th></th><th>Total</th></tr>"
+    summary_table = "<table><tr><th>Severity</th><th>Total</th></tr>"
     for severity, count in summary["severity"].items():
-        summary_table += "<tr><td>Severity {}</td><td>{}</td></tr>".format(severity, count)
-    for vendor_severity, count in summary["vendorSeverity"].items():
-        summary_table += "<tr><td>Vendor Severity {}</td><td>{}</td></tr>".format(vendor_severity, count)
+        summary_table += "<tr><td>{}</td><td>{}</td></tr>".format(severity, count)
     summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
 
     # Cria a tabela principal
@@ -76,6 +79,7 @@ def json_to_html(json_content):
 
     # Insere as tabelas no HTML completo e retorna o resultado
     return html_content.format(main_table, summary_table)
+
 
 def put_html_to_s3(html_content):
     s3 = boto3.resource('s3')
