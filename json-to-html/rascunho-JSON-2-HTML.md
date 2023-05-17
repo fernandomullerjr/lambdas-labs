@@ -1148,7 +1148,7 @@ Request ID
 # Dia 16/05/2023
 
 
-
+- Lambda26 não funciona, ocorre erro 500.
 
 
 # PENDENTE
@@ -1163,3 +1163,136 @@ Request ID
 - Desativar Amazon Inspector antes do fim do Trial.
 - Terminate EC2.
 - Deletar funções Lambda.
+- Documentar questões sobre Camadas para as Lambdas.
+
+
+
+
+
+
+
+
+
+
+Peço desculpas pela confusão anterior, aqui está o código completo e corrigido com formatação de bordas e link para a tabela de sumário:
+
+~~~~python
+
+import json
+import json2html
+
+def json_to_html(json_content):
+    # Converte o conteúdo JSON para um dicionário Python
+    data = json.loads(json_content)
+
+    # Define o HTML completo, adicionando cabeçalho e rodapé
+    html_content = """
+    <html>
+        <head>
+            <title>Relatório JSON para HTML</title>
+            <style>
+                table {
+                    border-collapse: collapse;
+                }
+                table, th, td {
+                    border: 1px solid black;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Relatório JSON para HTML</h1>
+            {}
+            <hr>
+            <h2 id="summary_table">Sumário de Findings</h2>
+            {}
+            <p>Gerado automaticamente pela Lambda AWS</p>
+        </body>
+    </html>
+    """
+
+    # Cria um dicionário para armazenar o sumário
+    summary = {"total": 0, "severity": {}, "vendorSeverity": {}}
+
+    # Itera sobre cada finding no JSON e atualiza o sumário
+    for finding in data["findings"]:
+        summary["total"] += 1
+        severity = finding["severity"]
+        summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+        vendor_severity = finding["packageVulnerabilityDetails"]["vendorSeverity"]
+        summary["vendorSeverity"][vendor_severity] = summary["vendorSeverity"].get(vendor_severity, 0) + 1
+
+    # Cria a tabela de sumário
+    summary_table = "<table><tr><th></th><th>Total</th></tr>"
+    for severity, count in summary["severity"].items():
+        summary_table += "<tr><td>Severity {}</td><td>{}</td></tr>".format(severity, count)
+    for vendor_severity, count in summary["vendorSeverity"].items():
+        summary_table += "<tr><td>Vendor Severity {}</td><td>{}</td></tr>".format(vendor_severity, count)
+    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+
+    # Cria a tabela principal
+    main_table = json2html.json2html.convert(json=data, table_attributes="id=\"findings_table\"")
+
+    # Adiciona um link para a tabela de sumário
+    main_table = main_table.replace("<body>", "<body><p><a href=\"#summary_table\">Ver Sumário de Findings</a></p>")
+
+    # Insere as tabelas no HTML completo e retorna o resultado
+    return html_content.format(main_table, summary_table)
+~~~~
+
+
+
+
+
+
+- Criada v27
+/home/fernando/cursos/lambdas-labs/json-to-html/python-lambdas/python-lambda27.py
+
+- Testando
+- ERRO
+
+~~~~BASH
+Test Event Name
+teste1
+
+Response
+{
+  "statusCode": 500,
+  "body": "{\"error\": \"'\\\\n                    border-collapse'\"}"
+}
+
+Function Logs
+START RequestId: 4ea4cdf8-69c6-4eb6-986d-f879c173eab4 Version: $LATEST
+'\n                    border-collapse'
+END RequestId: 4ea4cdf8-69c6-4eb6-986d-f879c173eab4
+REPORT RequestId: 4ea4cdf8-69c6-4eb6-986d-f879c173eab4	Duration: 2779.09 ms	Billed Duration: 2780 ms	Memory Size: 128 MB	Max Memory Used: 78 MB	Init Duration: 323.90 ms
+
+Request ID
+4ea4cdf8-69c6-4eb6-986d-f879c173eab4
+~~~~
+
+
+
+
+
+
+
+
+
+
+
+
+# PENDENTE
+- V24 funciona, sem trazer sumário.
+- V25 traz o sumário, mas consta ainda os "Vendor Severity" e as tabelas vieram sem bordas.
+- Criar nova versão, corrigindo bordas da tabela e trazendo o sumário.
+- Criar nova versão, fazendo com que o JSON convertido no HTML tenha sumários, resumo, melhor organização, etc. Separar por instance-id as findings???
+- Separar por instance-id as findings???
+- Instalar o "bs4 import BeautifulSoup" também, se necessário.
+- Usar o código do base8, fazer todo o processo com sumário+conversão-html.
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+- Documentar questões sobre Camadas para as Lambdas.
+
