@@ -1081,3 +1081,85 @@ Request ID
 ~~~~
 
 
+
+
+
+
+
+
+
+Peço desculpas pelo equívoco. Você está correto, o nome da função json_to_html está sendo referenciado corretamente no código.
+
+O erro que você está enfrentando parece estar relacionado ao conteúdo JSON retornado do objeto S3. O trecho content = response['Body'].read() retorna os dados binários do objeto S3. No entanto, a função json_to_html espera receber uma string JSON como entrada.
+
+Para corrigir esse problema, você precisa decodificar os dados binários em uma string antes de passá-los para a função json_to_html. Você pode fazer isso usando o método decode('utf-8').
+
+Para corrigir o erro, modifique a linha 16 do código da seguinte forma:
+
+python
+
+content = response['Body'].read().decode('utf-8')
+
+Dessa forma, os dados retornados do objeto S3 serão decodificados corretamente antes de serem passados para a função json_to_html. Isso deve resolver o problema e permitir que o código seja executado corretamente.
+
+
+
+- Adicionando:
+content = response['Body'].read().decode('utf-8')
+
+no arquivo:
+/home/fernando/cursos/lambdas-labs/json-to-html/python-lambdas/python-lambda26.py
+
+
+
+- Segue com erro:
+
+~~~~bash
+Test Event Name
+teste1
+
+Response
+{
+  "statusCode": 500,
+  "body": "{\"error\": \"'\\\\n                    border'\"}"
+}
+
+Function Logs
+START RequestId: 213adaed-b4fe-425d-9a07-7dab4559484e Version: $LATEST
+'\n                    border'
+END RequestId: 213adaed-b4fe-425d-9a07-7dab4559484e
+REPORT RequestId: 213adaed-b4fe-425d-9a07-7dab4559484e	Duration: 2776.88 ms	Billed Duration: 2777 ms	Memory Size: 128 MB	Max Memory Used: 78 MB	Init Duration: 334.17 ms
+
+Request ID
+213adaed-b4fe-425d-9a07-7dab4559484e
+~~~~
+
+
+
+
+
+
+
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# 
+# Dia 16/05/2023
+
+
+
+
+
+# PENDENTE
+- V25 traz o sumário, mas consta ainda os "Vendor Severity" e as tabelas vieram sem bordas.
+- Criar v26 e validar o ultimo GPT.
+- Criar nova versão, fazendo com que o JSON convertido no HTML tenha sumários, resumo, melhor organização, etc. Separar por instance-id as findings???
+- Separar por instance-id as findings???
+- Instalar o "bs4 import BeautifulSoup" também, se necessário.
+- Usar o código do base8, fazer todo o processo com sumário+conversão-html.
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.

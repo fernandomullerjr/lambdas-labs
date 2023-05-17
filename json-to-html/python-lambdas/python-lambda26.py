@@ -9,7 +9,7 @@ def lambda_handler(event, context):
     
     try:
         response = s3.get_object(Bucket=bucket_name, Key=object_name)
-        content = response['Body'].read()
+        content = response['Body'].read().decode('utf-8')
         
         # Chamar a função que converte o JSON para HTML
         html_content = json_to_html(content)
