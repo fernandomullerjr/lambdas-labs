@@ -59,7 +59,7 @@ def json_to_html(json_content):
     """
 
     # Cria um dicionário para armazenar o sumário
-    summary = {"total": 0, "severity": {}, "vendorSeverity": {}}
+    summary = {"total": 0, "severity": {}}
 
     # Itera sobre cada finding no JSON e atualiza o sumário
     for finding in data["findings"]:
@@ -67,15 +67,13 @@ def json_to_html(json_content):
         severity = finding["severity"]
         summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
         vendor_severity = finding["packageVulnerabilityDetails"]["vendorSeverity"]
-        summary["vendorSeverity"][vendor_severity] = summary["vendorSeverity"].get(vendor_severity, 0) + 1
 
     # Cria a tabela de sumário
     summary_table = "<table><tr><th></th><th>Total</th></tr>"
     for severity, count in summary["severity"].items():
         summary_table += "<tr><td>Severity {}</td><td>{}</td></tr>".format(severity, count)
-    for vendor_severity, count in summary["vendorSeverity"].items():
-        summary_table += "<tr><td>Vendor Severity {}</td><td>{}</td></tr>".format(vendor_severity, count)
-    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+    #summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"] - len(data["findings"]))
 
     # Cria a tabela principal
     main_table = json2html.json2html.convert(json=data, table_attributes="id=\"findings_table\"")

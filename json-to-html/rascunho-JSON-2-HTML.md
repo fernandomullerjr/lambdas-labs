@@ -1446,3 +1446,60 @@ file:///D:/OneDrive/Documents/Dev/Python/Lambdas/scan-interno-alternativa/report
 
 - Criar nova versão, fazendo com que o JSON convertido no HTML tenha sumários, resumo, melhor organização, etc. Separar por instance-id as findings???
 - Utilizar Pandas para fazer versão melhorada??
+
+
+
+
+
+Para remover os trechos que tratam sobre "Vendor Severity" da função json_to_html, você precisa fazer as seguintes alterações no código:
+
+    Remova a seguinte linha:
+
+python
+
+summary = {"total": 0, "severity": {}, "vendorSeverity": {}}
+
+    Modifique a linha abaixo:
+
+python
+
+summary["vendorSeverity"][vendor_severity] = summary["vendorSeverity"].get(vendor_severity, 0) + 1
+
+para:
+
+python
+
+# Não faz nada, apenas ignora o "vendorSeverity"
+pass
+
+    Remova o seguinte trecho de código:
+
+python
+
+for vendor_severity, count in summary["vendorSeverity"].items():
+    summary_table += "<tr><td>Vendor Severity {}</td><td>{}</td></tr>".format(vendor_severity, count)
+
+    Modifique a linha abaixo:
+
+python
+
+summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+
+para:
+
+python
+
+summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"] - len(data["findings"]))
+
+Isso deve remover a lógica relacionada ao "Vendor Severity" e ajustar a contagem total no resumo, considerando apenas a severidade.
+
+
+
+
+
+
+DE:
+
+    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+PARA:
+summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"] - len(data["findings"]))
