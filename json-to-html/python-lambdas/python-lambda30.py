@@ -33,6 +33,35 @@ def json_to_html(json_content):
     # Converte o conteúdo JSON para um dicionário Python
     data = json.loads(json_content)
 
+    # Cria um dicionário para armazenar o sumário
+    summary = {"total": 0, "severity": {}, "instance_id": {}}
+
+    # Itera sobre cada finding no JSON e atualiza o sumário
+    for finding in data["findings"]:
+        summary["total"] += 1
+        severity = finding["severity"]
+        summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+        summary_id = finding["resources"][0]["id"]
+        summary["instance_id"][summary_id] = summary["instance_id"].get(summary_id, 0) + 1
+
+    # Cria a tabela de sumário por id
+    summary_id_table = "<h2 id=\"id_summary_table\">Sumário por ID</h2><table><tr><th>ID da Instância</th><th>Total</th></tr>"
+    for summary_id, count in summary["instance_id"].items():
+        summary_id_table += "<tr><td>{}</td><td>{}</td></tr>".format(summary_id, count)
+    summary_id_table += "</table>"
+
+    # Cria a tabela de sumário
+    summary_table = "<table><tr><th></th><th>Total</th></tr>"
+    for severity, count in summary["severity"].items():
+        summary_table += "<tr><td>Severity {}</td><td>{}</td></tr>".format(severity, count)
+    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+
+    # Cria a tabela principal
+    main_table = json2html.json2html.convert(json=data, table_attributes="id=\"findings_table\"")
+
+    # Adiciona um link para a tabela de sumário
+    main_table = main_table.replace("<body>", "<body><p><a href=\"#summary_table\">Ver Sumário de Findings</a></p>")
+
     # Define o HTML completo, adicionando cabeçalho e rodapé
     html_content = """
     <html>
@@ -58,30 +87,8 @@ def json_to_html(json_content):
     </html>
     """
 
-    # Cria um dicionário para armazenar o sumário
-    summary = {"total": 0, "severity": {}}
-
-    # Itera sobre cada finding no JSON e atualiza o sumário
-    for finding in data["findings"]:
-        summary["total"] += 1
-        severity = finding["severity"]
-        summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
-        vendor_severity = finding["packageVulnerabilityDetails"]["vendorSeverity"]
-
-    # Cria a tabela de sumário
-    summary_table = "<table><tr><th></th><th>Total</th></tr>"
-    for severity, count in summary["severity"].items():
-        summary_table += "<tr><td>Severity {}</td><td>{}</td></tr>".format(severity, count)
-    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
-
-    # Cria a tabela principal
-    main_table = json2html.json2html.convert(json=data, table_attributes="id=\"findings_table\"")
-
-    # Adiciona um link para a tabela de sumário
-    main_table = main_table.replace("<body>", "<body><p><a href=\"#summary_table\">Ver Sumário de Findings</a></p>")
-
     # Insere as tabelas no HTML completo e retorna o resultado
-    return html_content.format(main_table, summary_table)
+    return html_content.format(main_table, summary_table + "<br>" + summary_id_table)
 
 def put_html_to_s3(html_content):
     s3 = boto3.resource('s3')

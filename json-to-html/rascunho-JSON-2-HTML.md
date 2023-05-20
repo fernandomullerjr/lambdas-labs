@@ -1503,3 +1503,210 @@ DE:
     summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
 PARA:
 summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"] - len(data["findings"]))
+
+
+
+
+
+
+
+
+fernando-teste	
+i-0db6e68a367e54c2b
+	
+Terminated
+
+Elastic IP addresses released.
+Elastic IP addresses 35.169.22.123
+
+
+
+
+
+
+
+Peço desculpas pelo equívoco. Se você deseja calcular o total de severidades, em vez de subtrair, você precisa ajustar a linha da seguinte maneira:
+
+python
+
+summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+
+Ao fazer essa alteração, o código irá exibir o número total de severidades encontradas no resumo, incluindo todas as severidades presentes nos findings.
+
+
+
+
+- Editado:
+
+/home/fernando/cursos/lambdas-labs/json-to-html/python-lambdas/python-lambda29.py
+
+
+
+- Teste OK
+trouxe o sumário corretamente
+
+Sumário de Findings
+	Total
+Severity MEDIUM	2
+Severity LOW	1
+Total	3
+
+
+
+
+
+
+
+
+## id
+
+Para adicionar um quadro com o sumário por "id" junto com o sumário por "severity", você precisa fazer as seguintes alterações no código da função json_to_html:
+
+    Modifique a linha abaixo:
+
+python
+
+summary = {"total": 0, "severity": {}}
+
+para:
+
+python
+
+summary = {"total": 0, "severity": {}, "id": {}}
+
+    Modifique a linha abaixo:
+
+python
+
+summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+
+para:
+
+python
+
+summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+summary_id = finding["findingArn"]
+summary["id"][summary_id] = summary["id"].get(summary_id, 0) + 1
+
+    Crie a tabela de sumário por "id" antes da tabela de sumário por "severity". Adicione o seguinte código antes de summary_table:
+
+python
+
+summary_id_table = "<h2 id=\"id_summary_table\">Sumário por ID</h2><table><tr><th>ID</th><th>Total</th></tr>"
+for summary_id, count in summary["id"].items():
+    summary_id_table += "<tr><td>{}</td><td>{}</td></tr>".format(summary_id, count)
+summary_id_table += "</table>"
+
+    Modifique a linha abaixo:
+
+python
+
+return html_content.format(main_table, summary_table)
+
+para:
+
+python
+
+return html_content.format(main_table, summary_table + summary_id_table)
+
+Após essas alterações, a função json_to_html criará um quadro adicional com o sumário por "id" no HTML gerado.
+
+
+
+
+- Editado
+/home/fernando/cursos/lambdas-labs/json-to-html/python-lambdas/python-lambda30.py
+
+
+- Testando
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ele sumarizou por findingArn ao invés de id da instancia, no caso o instance id, que faz parte do campo "id" no JSON.
+ChatGPT
+
+Peço desculpas pelo equívoco. Para corrigir o sumário por ID usando o campo "id" que contém o ID da instância, você precisa fazer as seguintes alterações no código da função json_to_html:
+
+    Modifique a linha abaixo:
+
+python
+
+summary = {"total": 0, "severity": {}, "id": {}}
+
+para:
+
+python
+
+summary = {"total": 0, "severity": {}, "instance_id": {}}
+
+    Modifique a linha abaixo:
+
+python
+
+summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+
+para:
+
+python
+
+summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+summary_id = finding["resources"][0]["id"]
+summary["instance_id"][summary_id] = summary["instance_id"].get(summary_id, 0) + 1
+
+    Crie a tabela de sumário por ID usando o campo "instance_id". Adicione o seguinte código antes de summary_table:
+
+python
+
+summary_id_table = "<h2 id=\"id_summary_table\">Sumário por ID</h2><table><tr><th>ID da Instância</th><th>Total</th></tr>"
+for summary_id, count in summary["instance_id"].items():
+    summary_id_table += "<tr><td>{}</td><td>{}</td></tr>".format(summary_id, count)
+summary_id_table += "</table>"
+
+    Modifique a linha abaixo:
+
+python
+
+return html_content.format(main_table, summary_table + summary_id_table)
+
+para:
+
+python
+
+return html_content.format(main_table, summary_table + "<br>" + summary_id_table)
+
+Após essas alterações, a função json_to_html criará um quadro adicional com o sumário por ID usando o campo "instance_id" no HTML gerado.
+
+
+
+
+
+
+
+- Editado
+/home/fernando/cursos/lambdas-labs/json-to-html/python-lambdas/python-lambda30.py
+
+- Trouxe
+
+Sumário de Findings
+	Total
+Severity MEDIUM	2
+Severity LOW	1
+Total	3
+
+Sumário por ID
+ID da Instância	Total
+i-0415ee9c35d4406ef	1
+i-06b2f79a29da7746b	1
+i-04e668b1627742918	1
