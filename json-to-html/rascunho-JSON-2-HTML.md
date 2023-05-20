@@ -1419,6 +1419,7 @@ file:///D:/OneDrive/Documents/Dev/Python/Lambdas/scan-interno-alternativa/report
 - V24 funciona, sem trazer sumário.
 - V28 ok, traz sumário e formatado.
 - Criar nova versão, fazendo com que o JSON convertido no HTML tenha sumários, resumo, melhor organização, etc. Separar por instance-id as findings???
+- Utilizar Pandas para fazer versão melhorada??
 - Separar por instance-id as findings???
 - Instalar o "bs4 import BeautifulSoup" também, se necessário.
 - Usar o código do base8, fazer todo o processo com sumário+conversão-html.
@@ -1428,3 +1429,20 @@ file:///D:/OneDrive/Documents/Dev/Python/Lambdas/scan-interno-alternativa/report
 - Terminate EC2.
 - Deletar funções Lambda.
 - Documentar questões sobre Camadas para as Lambdas.
+
+
+
+
+
+
+
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# 
+# Dia 19/05/2023
+
+
+- Criar nova versão, fazendo com que o JSON convertido no HTML tenha sumários, resumo, melhor organização, etc. Separar por instance-id as findings???
+- Utilizar Pandas para fazer versão melhorada??
