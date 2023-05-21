@@ -1710,3 +1710,34 @@ ID da Instância	Total
 i-0415ee9c35d4406ef	1
 i-06b2f79a29da7746b	1
 i-04e668b1627742918	1
+
+
+
+
+
+
+# PENDENTE
+- Organizar posição dos sumários e avaliar sumários interessantes.
+- Utilizar Pandas para fazer versão melhorada??
+- Separar por instance-id as findings???
+- Instalar o "bs4 import BeautifulSoup" também, se necessário.
+- Usar o código do base8, fazer todo o processo com sumário+conversão-html.
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+- Documentar questões sobre Camadas para as Lambdas.
+
+
+
+
+
+
+
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# 
+# Dia 20/05/2023
