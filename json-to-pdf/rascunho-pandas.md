@@ -1134,8 +1134,35 @@ cc85d947-22dd-46c8-a39c-087d965e481c
 
 
 
+
+
+- GPT
+ERRO
+
+
+Original error was: No module named 'numpy.core._multiarray_umath'
+ChatGPT
+
+Esse erro geralmente ocorre quando há uma incompatibilidade entre as versões do numpy e do pandas que estão sendo usadas. Para resolver esse problema, você pode tentar algumas soluções:
+
+    Certifique-se de que a versão do numpy que está sendo usada é compatível com a versão do pandas. Você pode verificar a versão do numpy instalada usando o comando np.__version__ após importar o numpy. Certifique-se de usar uma versão do numpy que seja compatível com o pandas. Se você estiver usando uma versão mais recente do numpy, pode tentar instalar uma versão mais antiga para resolver a incompatibilidade.
+
+    Verifique se o pacote numpy está instalado corretamente em seu ambiente Python. Você pode usar o comando pip show numpy para verificar se o pacote está instalado e qual é a versão instalada. Se não estiver instalado, você pode instalá-lo usando o comando pip install numpy.
+
+    Limpe o cache do AWS Lambda para garantir que as alterações feitas na camada estejam sendo aplicadas corretamente. Você pode fazer isso excluindo a camada existente e adicionando-a novamente à sua função Lambda.
+
+    Se você estiver usando um ambiente virtual (por exemplo, virtualenv), verifique se o numpy está instalado corretamente dentro do ambiente virtual. Certifique-se de ativar o ambiente virtual antes de executar sua função Lambda.
+
+    Se nenhuma das soluções acima resolver o problema, pode ser necessário recriar sua camada do Lambda, garantindo que as dependências corretas estejam incluídas na camada.
+
+Tente aplicar essas soluções e veja se o erro persiste.
+
+
+
+
+
 # PENDENTE
-- TSHOOT erro no import Numpy.
+- TSHOOT erro no import Numpy. Ver versões PANDA vs NUMPY.
 - Testar código para converter em PDF.
 
 - Stop/Start na EC2
