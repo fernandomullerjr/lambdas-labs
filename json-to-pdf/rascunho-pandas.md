@@ -467,3 +467,40 @@ Collecting pandas
     ----------------------------------------
 Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-install-wef2t_ki/pandas/
 fernando@debian10x64:~/cursos/lambdas-labs/json-to-pdf$
+
+
+
+
+
+
+
+
+
+
+
+https://pypi.org/
+
+
+
+
+
+
+
+
+
+
+
+# PENDENTE
+- Utilizar Pandas para fazer versão melhorada?? 
+- Instalar numa Layer o seguinte: pandas, matplotlib, reportlab
+    Seguir tutorial: https://sease.io/2022/11/how-to-import-pandas-in-aws-lambda.html
+    <https://sease.io/2022/11/how-to-import-pandas-in-aws-lambda.html>
+    https://pypi.org/project/pandas/#files
+- Instalar o "bs4 import BeautifulSoup" também, se necessário.
+- Usar o código do base8, fazer todo o processo com sumário+conversão-html.
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+- Documentar questões sobre Camadas para as Lambdas.

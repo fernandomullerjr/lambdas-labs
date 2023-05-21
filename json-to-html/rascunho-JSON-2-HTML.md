@@ -2188,3 +2188,24 @@ Nesse código, a variável file_path é definida como o caminho para o arquivo J
 A partir desse ponto, você pode chamar a função json_to_html e passar o content como argumento, assim como antes. O restante do código permanece o mesmo.
 
 Lembre-se de substituir 'base1.json' pelo caminho correto para o seu arquivo JSON local. Certifique-se de que o arquivo esteja no mesmo diretório do script Python ou forneça o caminho absoluto para o arquivo.
+
+
+
+
+
+
+
+
+
+
+
+# PENDENTE
+- Utilizar Pandas para fazer versão melhorada??
+- Instalar o "bs4 import BeautifulSoup" também, se necessário.
+- Usar o código do base8, fazer todo o processo com sumário+conversão-html.
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+- Documentar questões sobre Camadas para as Lambdas.
