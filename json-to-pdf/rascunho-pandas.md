@@ -573,3 +573,53 @@ Uploaded 4 de mar. de 2023 pp39
 reportlab-4.0.0-py3-none-any.whl (1.9 MB ver hashes)
 
 Uploaded 4 de mai. de 2023 py3
+
+
+
+
+
+
+
+
+- Criando Layer
+pandas-matplotlib-reportlab-camadas
+Layers contendo o Pandas - Matplotlib - ReportLab - 21-05-2023
+
+pandas-matplotlib-reportlab-camadas
+Create version
+
+    Successfully created layer pandas-matplotlib-reportlab-camadas version 1.
+
+All versions
+Version
+	
+Version ARN
+	
+Description
+1	arn:aws:lambda:us-east-1:261106957109:layer:pandas-matplotlib-reportlab-camadas:1	Layers contendo o Pandas - Matplotlib - ReportLab - 21-05-2023
+
+
+
+
+- Adicionando a layer
+Successfully updated the function json2pdf.
+
+
+
+
+- Erro
+
+/home/fernando/cursos/lambdas-labs/json-to-pdf/pandas3.py
+
+~~~~bash
+Test Event Name
+teste-pandas
+
+Response
+{
+  "errorMessage": "Unable to import module 'pandas3': Unable to import required dependencies:\nnumpy: No module named 'numpy'\npytz: No module named 'pytz'",
+  "errorType": "Runtime.ImportModuleError",
+  "requestId": "e7e29706-f7cb-407c-bc1e-2507876389af",
+  "stackTrace": []
+}
+~~~~
