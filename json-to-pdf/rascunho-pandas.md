@@ -14,6 +14,15 @@ git push
 git status
 
 
+
+
+
+
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+#  
 # PANDAS
 - Utilizar Pandas para fazer versão melhorada??
 
@@ -496,6 +505,7 @@ https://pypi.org/
     Seguir tutorial: https://sease.io/2022/11/how-to-import-pandas-in-aws-lambda.html
     <https://sease.io/2022/11/how-to-import-pandas-in-aws-lambda.html>
     https://pypi.org/project/pandas/#files
+    https://towardsdatascience.com/how-to-create-pdf-reports-with-python-the-essential-guide-c08dd3ebf2ee
 - Instalar o "bs4 import BeautifulSoup" também, se necessário.
 - Usar o código do base8, fazer todo o processo com sumário+conversão-html.
 - Stop/Start na EC2
@@ -504,3 +514,62 @@ https://pypi.org/
 - Terminate EC2.
 - Deletar funções Lambda.
 - Documentar questões sobre Camadas para as Lambdas.
+
+
+
+
+
+
+
+
+
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+# ###############################################################################################################################################################
+#  Dia 21/05/2023
+
+
+- Utilizar Pandas para fazer versão melhorada?? 
+- Instalar numa Layer o seguinte: pandas, matplotlib, reportlab
+    Seguir tutorial: https://sease.io/2022/11/how-to-import-pandas-in-aws-lambda.html
+    <https://sease.io/2022/11/how-to-import-pandas-in-aws-lambda.html>
+    https://pypi.org/project/pandas/#files
+    https://towardsdatascience.com/how-to-create-pdf-reports-with-python-the-essential-guide-c08dd3ebf2ee
+
+
+https://sease.io/2022/11/how-to-import-pandas-in-aws-lambda.html
+
+Create Layer Contents (locally)
+Step 1: Download files from Python Package Index (PyPI)
+
+The Python Package Index, abbreviated as PyPI, is the primary software repository for Python. We used it to download the Linux distributions of the necessary dependencies.
+
+Since we created the lambda function using the Python 3.9 runtime and the default architecture, we need to make sure we download the wheels files with the right built distribution type; in particular, we need to look at:
+
+    Python version –> cp39
+    architecture –> x86_64
+
+For operating ‘pandas’, you need to install two more required dependencies: ‘NumPy’ and ‘pytz’; so, for our purpose, we downloaded from PyPI these 3 files:
+
+    pandas: pandas-1.4.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    NumPy: numpy-1.23.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    pytz: pytz-2022.2.1-py2.py3-none-any.whl
+
+
+
+
+
+- Baixando
+
+pandas-2.0.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.2 MB ver hashes)
+
+Uploaded 24 de abr. de 2023 cp311
+
+matplotlib-3.7.1-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (7.5 MB ver hashes)
+
+Uploaded 4 de mar. de 2023 pp39
+
+reportlab-4.0.0-py3-none-any.whl (1.9 MB ver hashes)
+
+Uploaded 4 de mai. de 2023 py3
