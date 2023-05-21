@@ -607,6 +607,149 @@ Successfully updated the function json2pdf.
 
 
 
+
+
+
+
+
+
+Aqui está o código adaptado com as alterações solicitadas:
+
+~~~~python
+
+import json
+import boto3
+import pandas as pd
+import matplotlib.pyplot as plt
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+
+s3 = boto3.client('s3')
+bucket_name = 'devops-luxor'
+object_name = 'base1.json'
+
+def lambda_handler(event, context):
+    try:
+        # Ler o JSON a partir do bucket do S3
+        json_content = read_json_from_s3(bucket_name, object_name)
+        
+        # Converter para PDF
+        pdf_content = json_to_pdf(json_content)
+        
+        # Salvar o PDF no bucket do S3
+        put_pdf_to_s3(pdf_content)
+        
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'message': 'PDF file generated and saved successfully.'})
+        }
+    except Exception as e:
+        print(e)
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
+
+def read_json_from_s3(bucket_name, object_name):
+    response = s3.get_object(Bucket=bucket_name, Key=object_name)
+    content = response['Body'].read().decode('utf-8')
+    return content
+
+def json_to_pdf(json_content):
+    # Converte o conteúdo JSON para um DataFrame do Pandas
+    data = pd.json_normalize(json.loads(json_content), "findings")
+
+    # Cria um DataFrame para armazenar o sumário por ID
+    summary_id = data["resources.details.awsEc2Instance.ipV4Addresses"].explode().rename("IP")
+    summary_id = summary_id.groupby(data["resources.id"]).count().reset_index()
+
+    # Cria um DataFrame para armazenar o sumário por severidade
+    summary_severity = data["severity"].value_counts().reset_index().rename(columns={"index": "Severity", "severity": "Count"})
+
+    # Cria um gráfico de pizza com o sumário por severidade
+    plt.figure(figsize=(6, 6))
+    plt.pie(summary_severity["Count"], labels=summary_severity["Severity"], autopct="%1.1f%%")
+    plt.title("Summary by Severity")
+
+    # Cria o documento PDF
+    output_file = '/tmp/report.pdf'  # Path temporário para salvar o PDF
+    doc = SimpleDocTemplate(output_file, pagesize=letter)
+
+    # Cria os estilos para o documento PDF
+    styles = getSampleStyleSheet()
+    title_style = styles["Title"]
+    table_style = TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), "#CCCCCC"),
+        ("TEXTCOLOR", (0, 0), (-1, 0), "#000000"),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 12),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+        ("BACKGROUND", (0, 1), (-1, -1), "#FFFFFF"),
+        ("TEXTCOLOR", (0, 1), (-1, -1), "#000000"),
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        ("FONTSIZE", (0, 1), (-1, -1), 11),
+        ("TOPPADDING", (0, 1), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 1), (-1, -1), 6),
+        ("BOX", (0, 0), (-1, -1), 1, "#000000"),
+        ("GRID", (0, 0), (-1, -1), 1, "#000000"),
+    ])
+
+    # Cria o conteúdo do documento PDF
+    content = []
+
+    # Adiciona o título do relatório
+    content.append(Paragraph("JSON to PDF Report", title_style))
+
+    # Adiciona o sumário por ID
+    content.append(Paragraph("Summary by ID", styles["Heading2"]))
+    summary_id_table = Table([summary_id.columns] + summary_id.values.tolist())
+    summary_id_table.setStyle(table_style)
+    content.append(summary_id_table)
+
+    # Adiciona o sumário por severidade
+    content.append(Paragraph("Summary by Severity", styles["Heading2"]))
+    summary_severity_table = Table([summary_severity.columns] + summary_severity.values.tolist())
+    summary_severity_table.setStyle(table_style)
+    content.append(summary_severity_table)
+
+    # Adiciona o gráfico de pizza
+    plt.savefig("/tmp/pie_chart.png")  # Salva o gráfico em um path temporário
+    content.append(Paragraph("<img src='/tmp/pie_chart.png'/>", styles["BodyText"]))
+
+    # Adiciona o rodapé
+    content.append(Paragraph("Generated automatically by Python", styles["Footer"]))
+
+    # Adiciona o conteúdo ao documento PDF
+    doc.build(content)
+
+    # Lê o conteúdo do PDF
+    with open(output_file, 'rb') as file:
+        pdf_content = file.read()
+
+    return pdf_content
+
+def put_pdf_to_s3(pdf_content):
+    object_name = 'relatorio-final.pdf'  # Nome do arquivo PDF no bucket do S3
+
+    try:
+        s3.put_object(Body=pdf_content, Bucket=bucket_name, Key=object_name)
+        print("PDF file saved successfully!")
+    except Exception as e:
+        print(e)
+~~~~
+
+Este código divide as funcionalidades em três funções principais: read_json_from_s3 para ler o conteúdo JSON do bucket do S3, json_to_pdf para converter o JSON para PDF com o gráfico de pizza e os sumários, e put_pdf_to_s3 para salvar o arquivo PDF gerado no bucket do S3.
+
+Certifique-se de substituir bucket_name pelo nome correto do seu bucket do S3. Além disso, note que utilizei caminhos temporários /tmp/ para salvar o arquivo PDF e a imagem do gráfico de pizza. Você pode ajustar esses caminhos conforme necessário.
+
+
+
+
+
+- Testando:
+/home/fernando/cursos/lambdas-labs/json-to-pdf/pandas3.py
+
 - Erro
 
 /home/fernando/cursos/lambdas-labs/json-to-pdf/pandas3.py
@@ -623,3 +766,381 @@ Response
   "stackTrace": []
 }
 ~~~~
+
+
+
+
+
+
+git status
+eval $(ssh-agent -s)
+ssh-add /home/fernando/.ssh/chave-debian10-github
+git add .
+git commit -m "Lambda Labs - JSON 2 PDF - Pandas3, testando versão inicial. TSHOOT erro Unable to import required dependencies nnumpy No module named numpy"
+git push
+git status
+
+
+
+
+
+
+
+
+
+- Baixando
+
+https://pypi.org/project/numpy/#files
+
+numpy-1.24.3-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.7 MB ver hashes)
+
+Uploaded 22 de abr. de 2023 pp38 
+
+
+
+
+
+- Layer
+criando version
+Adicionando o NumPy
+
+pandas-matplotlib-reportlab-camadas
+Create version
+
+    Successfully created layer pandas-matplotlib-reportlab-camadas version 2.
+All versions
+Version
+	
+Version ARN
+	
+Description
+2	arn:aws:lambda:us-east-1:261106957109:layer:pandas-matplotlib-reportlab-camadas:2	Adicionando o NumPy
+1	arn:aws:lambda:us-east-1:261106957109:layer:pandas-matplotlib-reportlab-camadas:1	Layers contendo o Pandas - Matplotlib - ReportLab - 21-05-2023
+
+
+
+Successfully updated the function json2pdf.
+
+
+
+
+
+
+
+- ERRO
+
+~~~~BASH
+Test Event Name
+teste-pandas
+
+Response
+{
+  "errorMessage": "Unable to import module 'pandas3': Unable to import required dependencies:\nnumpy: \n\nIMPORTANT: PLEASE READ THIS FOR ADVICE ON HOW TO SOLVE THIS ISSUE!\n\nImporting the numpy C-extensions failed. This error can happen for\nmany reasons, often due to issues with your setup or how NumPy was\ninstalled.\n\nWe have compiled some common reasons and troubleshooting tips at:\n\n    https://numpy.org/devdocs/user/troubleshooting-importerror.html\n\nPlease note and check the following:\n\n  * The Python version is: Python3.8 from \"/var/lang/bin/python3.8\"\n  * The NumPy version is: \"1.24.3\"\n\nand make sure that they are the versions you expect.\nPlease carefully study the documentation linked above for further help.\n\nOriginal error was: No module named 'numpy.core._multiarray_umath'\n\npytz: No module named 'pytz'",
+  "errorType": "Runtime.ImportModuleError",
+  "stackTrace": []
+}
+
+Function Logs
+START RequestId: 4e8f290f-9dbd-44af-908f-39183707d636 Version: $LATEST
+[ERROR] Runtime.ImportModuleError: Unable to import module 'pandas3': Unable to import required dependencies:
+numpy: 
+
+IMPORTANT: PLEASE READ THIS FOR ADVICE ON HOW TO SOLVE THIS ISSUE!
+
+Importing the numpy C-extensions failed. This error can happen for
+many reasons, often due to issues with your setup or how NumPy was
+installed.
+
+We have compiled some common reasons and troubleshooting tips at:
+
+    https://numpy.org/devdocs/user/troubleshooting-importerror.html
+
+Please note and check the following:
+
+  * The Python version is: Python3.8 from "/var/lang/bin/python3.8"
+  * The NumPy version is: "1.24.3"
+
+and make sure that they are the versions you expect.
+Please carefully study the documentation linked above for further help.
+
+Original error was: No module named 'numpy.core._multiarray_umath'
+
+pytz: No module named 'pytz'
+Traceback (most recent call last):END RequestId: 4e8f290f-9dbd-44af-908f-39183707d636
+REPORT RequestId: 4e8f290f-9dbd-44af-908f-39183707d636	Duration: 1.74 ms	Billed Duration: 2 ms	Memory Size: 128 MB	Max Memory Used: 54 MB	Init Duration: 294.23 ms
+
+Request ID
+4e8f290f-9dbd-44af-908f-39183707d636
+~~~~
+
+
+
+
+
+
+
+
+- GPT
+O erro ocorre porque a biblioteca pandas requer a biblioteca numpy e a biblioteca pytz para funcionar corretamente. Parece que essas bibliotecas não estão instaladas no ambiente onde o código está sendo executado.
+
+Uma possível solução para esse problema é empacotar todas as dependências necessárias, incluindo o numpy e o pytz, juntamente com o código da função Lambda e enviá-los como um pacote. Dessa forma, todas as dependências estarão disponíveis durante a execução da função.
+
+Aqui estão os passos para criar um pacote com todas as dependências:
+
+    Crie um diretório vazio para o projeto.
+    No diretório do projeto, crie um ambiente virtual usando o comando python3 -m venv venv.
+    Ative o ambiente virtual executando o comando source venv/bin/activate (Linux/macOS) ou venv\Scripts\activate (Windows).
+    Instale as dependências necessárias executando o comando pip install pandas numpy pytz.
+    Crie um arquivo vazio chamado __init__.py no diretório do projeto. Esse arquivo é necessário para indicar que o diretório é um pacote Python.
+    Copie o código da função Lambda para um arquivo chamado lambda_function.py no diretório do projeto.
+    Compacte todo o conteúdo do diretório do projeto, incluindo o ambiente virtual, em um arquivo zip. Certifique-se de que o arquivo zip não tenha um nível de diretório extra. Por exemplo, quando você extrair o arquivo zip, deve ver diretamente o ambiente virtual e o arquivo lambda_function.py na raiz do diretório extraído.
+    Faça o upload do arquivo zip para a função Lambda.
+
+Essas etapas garantem que todas as dependências necessárias estejam incluídas no pacote e disponíveis durante a execução da função Lambda.
+User
+ADICIONAR apenas o pytz a layer da Lambda, já que o numpy já está na Layer, resolveria?
+ChatGPT
+
+Sim, se o pacote numpy já estiver em uma camada (Layer) separada e você adicionar apenas a camada do pytz à sua função Lambda, isso resolveria o problema.
+
+As camadas da AWS Lambda são uma forma de fornecer e gerenciar bibliotecas e dependências externas para suas funções sem incluí-las diretamente no pacote da função. Ao adicionar a camada do pytz, você estará fornecendo a biblioteca necessária para sua função Lambda.
+
+Certifique-se de seguir as etapas a seguir:
+
+    Crie uma camada Lambda separada contendo a biblioteca pytz.
+    Abra a console da AWS e acesse o serviço AWS Lambda.
+    Navegue até a página da sua função Lambda.
+    Na seção "Configuração da função", role para baixo até a seção "Camadas".
+    Clique em "Adicionar uma camada" e selecione a camada do pytz que você criou.
+    Salve as alterações na função Lambda.
+    Teste novamente sua função Lambda para verificar se o erro relacionado ao pytz foi resolvido.
+
+Ao adicionar a camada separada do pytz, você garante que todas as dependências necessárias estejam disponíveis para a função Lambda durante a execução, resolvendo o erro que mencionou anteriormente.
+
+
+
+
+
+
+
+- Criando nova version para Layer
+https://pypi.org/project/pytz/#files
+
+pytz-2023.3-py2.py3-none-any.whl (502.3 kB ver hashes)
+
+Uploaded 29 de mar. de 2023 py2 py3
+
+
+pandas-matplotlib-reportlab-camadas
+Create version
+
+    Successfully created layer pandas-matplotlib-reportlab-camadas version 3.
+All versions
+Version
+	
+Version ARN
+	
+Description
+3	arn:aws:lambda:us-east-1:261106957109:layer:pandas-matplotlib-reportlab-camadas:3	Adicionando Pytz 
+
+
+
+
+
+
+
+
+
+
+
+
+
+- ERRO
+
+/home/fernando/cursos/lambdas-labs/json-to-pdf/pandas3.py
+
+Test Event Name
+teste-pandas
+
+Response
+{
+  "errorMessage": "Unable to import module 'pandas3': Unable to import required dependencies:\nnumpy: \n\nIMPORTANT: PLEASE READ THIS FOR ADVICE ON HOW TO SOLVE THIS ISSUE!\n\nImporting the numpy C-extensions failed. This error can happen for\nmany reasons, often due to issues with your setup or how NumPy was\ninstalled.\n\nWe have compiled some common reasons and troubleshooting tips at:\n\n    https://numpy.org/devdocs/user/troubleshooting-importerror.html\n\nPlease note and check the following:\n\n  * The Python version is: Python3.8 from \"/var/lang/bin/python3.8\"\n  * The NumPy version is: \"1.24.3\"\n\nand make sure that they are the versions you expect.\nPlease carefully study the documentation linked above for further help.\n\nOriginal error was: No module named 'numpy.core._multiarray_umath'\n",
+  "errorType": "Runtime.ImportModuleError",
+  "stackTrace": []
+}
+
+Function Logs
+START RequestId: 91db972a-81e6-406b-a27a-e4ecad2523c1 Version: $LATEST
+[ERROR] Runtime.ImportModuleError: Unable to import module 'pandas3': Unable to import required dependencies:
+numpy: 
+
+IMPORTANT: PLEASE READ THIS FOR ADVICE ON HOW TO SOLVE THIS ISSUE!
+
+Importing the numpy C-extensions failed. This error can happen for
+many reasons, often due to issues with your setup or how NumPy was
+installed.
+
+We have compiled some common reasons and troubleshooting tips at:
+
+    https://numpy.org/devdocs/user/troubleshooting-importerror.html
+
+Please note and check the following:
+
+  * The Python version is: Python3.8 from "/var/lang/bin/python3.8"
+  * The NumPy version is: "1.24.3"
+
+and make sure that they are the versions you expect.
+Please carefully study the documentation linked above for further help.
+
+Original error was: No module named 'numpy.core._multiarray_umath'
+
+Traceback (most recent call last):END RequestId: 91db972a-81e6-406b-a27a-e4ecad2523c1
+REPORT RequestId: 91db972a-81e6-406b-a27a-e4ecad2523c1	Duration: 1.65 ms	Billed Duration: 2 ms	Memory Size: 128 MB	Max Memory Used: 55 MB	Init Duration: 289.45 ms
+
+Request ID
+91db972a-81e6-406b-a27a-e4ecad2523c1
+
+
+
+
+
+
+
+- GPT
+
+Adicionar apenas a camada do pytz não resolverá o problema, pois o erro menciona que a biblioteca numpy não pode ser importada corretamente.
+
+Para corrigir esse problema, você precisa adicionar a camada que contém o numpy à sua função Lambda, juntamente com a camada do pytz. Certifique-se de que ambas as camadas estejam adicionadas corretamente na configuração da função Lambda.
+
+Siga as etapas abaixo para adicionar ambas as camadas:
+
+    Certifique-se de ter uma camada separada que contenha o numpy.
+    Abra a console da AWS e acesse o serviço AWS Lambda.
+    Navegue até a página da sua função Lambda.
+    Na seção "Configuração da função", role para baixo até a seção "Camadas".
+    Clique em "Adicionar uma camada" e selecione a camada do pytz que você criou.
+    Clique em "Adicionar uma camada" novamente e selecione a camada que contém o numpy.
+    Salve as alterações na função Lambda.
+    Teste novamente sua função Lambda para verificar se o erro foi resolvido.
+
+Ao adicionar ambas as camadas, você garantirá que tanto o numpy quanto o pytz estejam disponíveis para a função Lambda durante a execução, permitindo que o código seja executado corretamente.
+User
+como fazer o import do numpy e pytz no código?
+ChatGPT
+
+Para importar as bibliotecas numpy e pytz no seu código, você pode usar a seguinte sintaxe:
+
+python
+
+import numpy as np
+import pytz
+
+Isso importará o numpy com o alias np, permitindo que você use suas funções e objetos prefixados com np. Por exemplo, você pode usar np.array() para criar um array do numpy.
+
+O pytz pode ser importado diretamente sem um alias. Você pode usar suas funções e objetos diretamente pelo nome, como pytz.timezone() para obter um objeto de fuso horário.
+
+Aqui está um exemplo de código que importa o numpy e o pytz:
+
+python
+
+import numpy as np
+import pytz
+
+# Usando o numpy
+arr = np.array([1, 2, 3])
+print(arr)
+
+# Usando o pytz
+timezone = pytz.timezone('America/New_York')
+print(timezone)
+
+Certifique-se de ter instalado as bibliotecas numpy e pytz em seu ambiente Python antes de executar o código. Você pode instalá-las usando o pip. Por exemplo:
+
+pip install numpy
+pip install pytz
+
+Lembre-se de que, ao usar as camadas do AWS Lambda, você não precisa se preocupar com a instalação das bibliotecas, pois elas já estão incluídas na camada.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- Teste
+/home/fernando/cursos/lambdas-labs/json-to-pdf/pandas4.py
+
+
+- ERRO
+Test Event Name
+teste-pandas
+
+Response
+{
+  "errorMessage": "Unable to import module 'pandas4': Unable to import required dependencies:\nnumpy: \n\nIMPORTANT: PLEASE READ THIS FOR ADVICE ON HOW TO SOLVE THIS ISSUE!\n\nImporting the numpy C-extensions failed. This error can happen for\nmany reasons, often due to issues with your setup or how NumPy was\ninstalled.\n\nWe have compiled some common reasons and troubleshooting tips at:\n\n    https://numpy.org/devdocs/user/troubleshooting-importerror.html\n\nPlease note and check the following:\n\n  * The Python version is: Python3.8 from \"/var/lang/bin/python3.8\"\n  * The NumPy version is: \"1.24.3\"\n\nand make sure that they are the versions you expect.\nPlease carefully study the documentation linked above for further help.\n\nOriginal error was: No module named 'numpy.core._multiarray_umath'\n",
+  "errorType": "Runtime.ImportModuleError",
+  "stackTrace": []
+}
+
+Function Logs
+START RequestId: cc85d947-22dd-46c8-a39c-087d965e481c Version: $LATEST
+[ERROR] Runtime.ImportModuleError: Unable to import module 'pandas4': Unable to import required dependencies:
+numpy: 
+
+IMPORTANT: PLEASE READ THIS FOR ADVICE ON HOW TO SOLVE THIS ISSUE!
+
+Importing the numpy C-extensions failed. This error can happen for
+many reasons, often due to issues with your setup or how NumPy was
+installed.
+
+We have compiled some common reasons and troubleshooting tips at:
+
+    https://numpy.org/devdocs/user/troubleshooting-importerror.html
+
+Please note and check the following:
+
+  * The Python version is: Python3.8 from "/var/lang/bin/python3.8"
+  * The NumPy version is: "1.24.3"
+
+and make sure that they are the versions you expect.
+Please carefully study the documentation linked above for further help.
+
+Original error was: No module named 'numpy.core._multiarray_umath'
+
+Traceback (most recent call last):END RequestId: cc85d947-22dd-46c8-a39c-087d965e481c
+REPORT RequestId: cc85d947-22dd-46c8-a39c-087d965e481c	Duration: 1.50 ms	Billed Duration: 2 ms	Memory Size: 128 MB	Max Memory Used: 55 MB	Init Duration: 287.71 ms
+
+Request ID
+cc85d947-22dd-46c8-a39c-087d965e481c
+
+
+
+
+
+
+
+
+
+
+
+
+
+# PENDENTE
+- TSHOOT erro no import Numpy.
+- Testar código para converter em PDF.
+
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+- Documentar questões sobre Camadas para as Lambdas.
