@@ -1741,3 +1741,237 @@ i-04e668b1627742918	1
 # ###############################################################################################################################################################
 # 
 # Dia 20/05/2023
+
+
+- Organizar posição dos sumários e avaliar sumários interessantes.
+- Utilizar Pandas para fazer versão melhorada??
+
+
+
+/home/fernando/cursos/lambdas-labs/json-to-html/python-lambdas/python-lambda31.py
+
+
+Aqui está a função adaptada para incluir uma coluna com o endereço IP no sumário organizado por ID e mover os sumários para o início do arquivo HTML:
+
+python
+
+def json_to_html(json_content):
+    # Converte o conteúdo JSON para um dicionário Python
+    data = json.loads(json_content)
+
+    # Cria um dicionário para armazenar o sumário
+    summary = {"total": 0, "severity": {}, "instance_id": {}}
+
+    # Itera sobre cada finding no JSON e atualiza o sumário
+    for finding in data["findings"]:
+        summary["total"] += 1
+        severity = finding["severity"]
+        summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+        summary_id = finding["resources"][0]["id"]
+        summary["instance_id"][summary_id] = {
+            "count": summary["instance_id"].get(summary_id, {}).get("count", 0) + 1,
+            "ip": finding["resources"][0]["details"]["awsEc2Instance"]["ipV4Addresses"][0]
+        }
+
+    # Cria a tabela de sumário por id com a coluna de endereço IP
+    summary_id_table = "<h2 id=\"id_summary_table\">Sumário por ID</h2><table><tr><th>ID da Instância</th><th>Endereço IP</th><th>Total</th></tr>"
+    for summary_id, values in summary["instance_id"].items():
+        summary_id_table += "<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(summary_id, values["ip"], values["count"])
+    summary_id_table += "</table>"
+
+    # Cria a tabela de sumário
+    summary_table = "<table><tr><th></th><th>Total</th></tr>"
+    for severity, count in summary["severity"].items():
+        summary_table += "<tr><td>Severity {}</td><td>{}</td></tr>".format(severity, count)
+    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+
+    # Cria a tabela principal
+    main_table = json2html.json2html.convert(json=data, table_attributes="id=\"findings_table\"")
+
+    # Adiciona um link para a tabela de sumário
+    main_table = main_table.replace("<body>", "<body><p><a href=\"#summary_table\">Ver Sumário de Findings</a></p>")
+
+    # Define o HTML completo, adicionando cabeçalho e rodapé
+    html_content = """
+    <html>
+        <head>
+            <title>Relatório JSON para HTML</title>
+            <style>
+                table {{
+                    border-collapse: collapse;
+                }}
+                table, th, td {{
+                    border: 1px solid black;
+                }}
+            </style>
+        </head>
+        <body>
+            <h1>Relatório JSON para HTML</h1>
+            <h2 id="summary_table">Sumário de Findings</h2>
+            {}
+            <hr>
+            <h2 id="id_summary_table">Sumário por ID</h2>
+            {}
+            {}
+            <p>Gerado automaticamente pela Lambda AWS</p>
+        </body>
+    </html>
+    """
+
+    # Insere as tabelas no HTML completo e retorna o resultado
+    return html_content.format(summary_table + "<br>" + summary_id_table, main_table, summary_table + "<br>" + summary_id_table)
+
+Essa função atualizada inclui a coluna "Endereço IP" na tabela de sumário por ID, buscando o valor do campo "ipV4Addresses" no JSON. Os sumários foram movidos para o início do arquivo HTML, conforme solicitado.
+
+
+
+
+
+
+Aqui está a função adaptada para incluir uma coluna com o endereço IP no sumário organizado por ID e mover os sumários para o início do arquivo HTML:
+
+python
+
+def json_to_html(json_content):
+    # Converte o conteúdo JSON para um dicionário Python
+    data = json.loads(json_content)
+
+    # Cria um dicionário para armazenar o sumário
+    summary = {"total": 0, "severity": {}, "instance_id": {}}
+
+    # Itera sobre cada finding no JSON e atualiza o sumário
+    for finding in data["findings"]:
+        summary["total"] += 1
+        severity = finding["severity"]
+        summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+        summary_id = finding["resources"][0]["id"]
+        summary["instance_id"][summary_id] = {
+            "count": summary["instance_id"].get(summary_id, {}).get("count", 0) + 1,
+            "ip": finding["resources"][0]["details"]["awsEc2Instance"]["ipV4Addresses"][0]
+        }
+
+    # Cria a tabela de sumário por id com a coluna de endereço IP
+    summary_id_table = "<h2 id=\"id_summary_table\">Sumário por ID</h2><table><tr><th>ID da Instância</th><th>Endereço IP</th><th>Total</th></tr>"
+    for summary_id, values in summary["instance_id"].items():
+        summary_id_table += "<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(summary_id, values["ip"], values["count"])
+    summary_id_table += "</table>"
+
+    # Cria a tabela de sumário
+    summary_table = "<table><tr><th></th><th>Total</th></tr>"
+    for severity, count in summary["severity"].items():
+        summary_table += "<tr><td>Severity {}</td><td>{}</td></tr>".format(severity, count)
+    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+
+    # Cria a tabela principal
+    main_table = json2html.json2html.convert(json=data, table_attributes="id=\"findings_table\"")
+
+    # Adiciona um link para a tabela de sumário
+    main_table = main_table.replace("<body>", "<body><p><a href=\"#summary_table\">Ver Sumário de Findings</a></p>")
+
+    # Define o HTML completo, adicionando cabeçalho e rodapé
+    html_content = """
+    <html>
+        <head>
+            <title>Relatório JSON para HTML</title>
+            <style>
+                table {{
+                    border-collapse: collapse;
+                }}
+                table, th, td {{
+                    border: 1px solid black;
+                }}
+            </style>
+        </head>
+        <body>
+            <h1>Relatório JSON para HTML</h1>
+            <h2 id="summary_table">Sumário de Findings</h2>
+            {}
+            <hr>
+            <h2 id="id_summary_table">Sumário por ID</h2>
+            {}
+            {}
+            <p>Gerado automaticamente pela Lambda AWS</p>
+        </body>
+    </html>
+    """
+
+    # Insere as tabelas no HTML completo e retorna o resultado
+    return html_content.format(summary_table + "<br>" + summary_id_table, main_table, summary_table + "<br>" + summary_id_table)
+
+Essa função atualizada inclui a coluna "Endereço IP" na tabela de sumário por ID, buscando o valor do campo "ipV4Addresses" no JSON. Os sumários foram movidos para o início do arquivo HTML, conforme solicitado.
+User
+com este código, os sumários vieram 2 vezes, uma antes da tabela principal e outra vez ao final.
+ChatGPT
+
+Peço desculpas pelo erro. Foi uma duplicação acidental. Aqui está o código corrigido, onde os sumários são exibidos apenas uma vez no início do arquivo HTML:
+
+python
+
+def json_to_html(json_content):
+    # Converte o conteúdo JSON para um dicionário Python
+    data = json.loads(json_content)
+
+    # Cria um dicionário para armazenar o sumário
+    summary = {"total": 0, "severity": {}, "instance_id": {}}
+
+    # Itera sobre cada finding no JSON e atualiza o sumário
+    for finding in data["findings"]:
+        summary["total"] += 1
+        severity = finding["severity"]
+        summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
+        summary_id = finding["resources"][0]["id"]
+        ip_address = finding["resources"][0]["details"]["awsEc2Instance"]["ipV4Addresses"][0]
+        if summary_id in summary["instance_id"]:
+            summary["instance_id"][summary_id]["count"] += 1
+        else:
+            summary["instance_id"][summary_id] = {"count": 1, "ip": ip_address}
+
+    # Cria a tabela de sumário por id com a coluna de endereço IP
+    summary_id_table = "<h2 id=\"id_summary_table\">Sumário por ID</h2><table><tr><th>ID da Instância</th><th>Endereço IP</th><th>Total</th></tr>"
+    for summary_id, values in summary["instance_id"].items():
+        summary_id_table += "<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(summary_id, values["ip"], values["count"])
+    summary_id_table += "</table>"
+
+    # Cria a tabela de sumário
+    summary_table = "<table><tr><th></th><th>Total</th></tr>"
+    for severity, count in summary["severity"].items():
+        summary_table += "<tr><td>Severity {}</td><td>{}</td></tr>".format(severity, count)
+    summary_table += "<tr><td>Total</td><td>{}</td></tr></table>".format(summary["total"])
+
+    # Cria a tabela principal
+    main_table = json2html.json2html.convert(json=data, table_attributes="id=\"findings_table\"")
+
+    # Adiciona um link para a tabela de sumário
+    main_table = main_table.replace("<body>", "<body><p><a href=\"#summary_table\">Ver Sumário de Findings</a></p>")
+
+    # Define o HTML completo, adicionando cabeçalho e rodapé
+    html_content = """
+    <html>
+        <head>
+            <title>Relatório JSON para HTML</title>
+            <style>
+                table {{
+                    border-collapse: collapse;
+                }}
+                table, th, td {{
+                    border: 1px solid black;
+                }}
+            </style>
+        </head>
+        <body>
+            <h1>Relatório JSON para HTML</h1>
+            <h2 id="summary_table">Sumário de Findings</h2>
+            {}
+            <hr>
+            <h2 id="id_summary_table">Sumário por ID</h2>
+            {}
+            {}
+            <p>Gerado automaticamente pela Lambda AWS</p>
+        </body>
+    </html>
+    """
+
+    # Insere as tabelas no HTML completo e retorna o resultado
+    return html_content.format(summary_table, summary_id_table, main_table)
+
+Dessa forma, os sumários serão exibidos apenas uma vez no início do arquivo HTML, antes da tabela principal.
