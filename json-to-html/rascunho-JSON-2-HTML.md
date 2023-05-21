@@ -1975,3 +1975,52 @@ def json_to_html(json_content):
     return html_content.format(summary_table, summary_id_table, main_table)
 
 Dessa forma, os sumários serão exibidos apenas uma vez no início do arquivo HTML, antes da tabela principal.
+
+
+
+
+
+- Editado:
+/home/fernando/cursos/lambdas-labs/json-to-html/python-lambdas/python-lambda31.py
+
+- Teste OK
+
+~~~~JSON
+Test Event Name
+teste1
+
+Response
+{
+  "statusCode": 200,
+  "body": "{\"content\
+~~~~
+
+
+- Arquivo em HTML traz os sumários e formata corretamente:
+
+Relatório JSON para HTML
+Sumário de Findings
+	Total
+Severity MEDIUM	2
+Severity LOW	1
+Total	3
+Sumário por ID
+ID da Instância	Endereço IP	Total
+i-0415ee9c35d4406ef	172.30.4.168	1
+i-06b2f79a29da7746b	172.30.4.98	1
+i-04e668b1627742918	172.30.4.153	1
+
+Gerado automaticamente pela Lambda AWS
+
+
+
+
+
+
+
+
+
+
+
+# PANDAS
+- Utilizar Pandas para fazer versão melhorada??

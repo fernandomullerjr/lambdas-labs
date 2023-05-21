@@ -42,10 +42,11 @@ def json_to_html(json_content):
         severity = finding["severity"]
         summary["severity"][severity] = summary["severity"].get(severity, 0) + 1
         summary_id = finding["resources"][0]["id"]
-        summary["instance_id"][summary_id] = {
-            "count": summary["instance_id"].get(summary_id, {}).get("count", 0) + 1,
-            "ip": finding["resources"][0]["details"]["awsEc2Instance"]["ipV4Addresses"][0]
-        }
+        ip_address = finding["resources"][0]["details"]["awsEc2Instance"]["ipV4Addresses"][0]
+        if summary_id in summary["instance_id"]:
+            summary["instance_id"][summary_id]["count"] += 1
+        else:
+            summary["instance_id"][summary_id] = {"count": 1, "ip": ip_address}
 
     # Cria a tabela de sumário por id com a coluna de endereço IP
     summary_id_table = "<h2 id=\"id_summary_table\">Sumário por ID</h2><table><tr><th>ID da Instância</th><th>Endereço IP</th><th>Total</th></tr>"
@@ -84,16 +85,15 @@ def json_to_html(json_content):
             <h2 id="summary_table">Sumário de Findings</h2>
             {}
             <hr>
-            <h2 id="id_summary_table">Sumário por ID</h2>
-            {}
             {}
             <p>Gerado automaticamente pela Lambda AWS</p>
+            {}
         </body>
     </html>
     """
 
     # Insere as tabelas no HTML completo e retorna o resultado
-    return html_content.format(summary_table + "<br>" + summary_id_table, main_table, summary_table + "<br>" + summary_id_table)
+    return html_content.format(summary_table, summary_id_table, main_table)
 
 def put_html_to_s3(html_content):
     s3 = boto3.resource('s3')
