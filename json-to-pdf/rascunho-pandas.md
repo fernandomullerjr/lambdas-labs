@@ -1225,5 +1225,47 @@ Response
 
 
 
+- TSHOOT
+https://korniichuk.medium.com/lambda-with-pandas-fd81aa2ff25e
+
 
 Baixando novamente os arquivos do pypi org - Baixando na versao 3-8 do python - Ajustando estrutura de pastas - 
+
+
+pandas-matplotlib-reportlab-camadas
+Create version
+
+    Successfully created layer pandas-matplotlib-reportlab-camadas version 5.
+
+- ERRO:
+
+~~~~BASH
+Test Event Name
+teste-pandas
+
+Response
+{
+  "errorMessage": "Unable to import module 'pandas4': Unable to import required dependencies:\nnumpy: \n\nIMPORTANT: PLEASE READ THIS FOR ADVICE ON HOW TO SOLVE THIS ISSUE!\n\nImporting the numpy C-extensions failed. This error can happen for\nmany reasons, often due to issues with your setup or how NumPy was\ninstalled.\n\nWe have compiled some common reasons and troubleshooting tips at:\n\n    https://numpy.org/devdocs/user/troubleshooting-importerror.html\n\nPlease note and check the following:\n\n  * The Python version is: Python3.8 from \"/var/lang/bin/python3.8\"\n  * The NumPy version is: \"1.24.3\"\n\nand make sure that they are the versions you expect.\nPlease carefully study the documentation linked above for further help.\n\nOriginal error was: No module named 'numpy.core._multiarray_umath'\n",
+  "errorType": "Runtime.ImportModuleError",
+  "stackTrace": []
+}
+
+~~~~
+
+
+
+
+
+
+
+
+
+
+- Novo teste
+efetuando downgrade
+
+DE:
+numpy-1.24.3-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64
+
+PARA:
+numpy-1.21.0-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64
