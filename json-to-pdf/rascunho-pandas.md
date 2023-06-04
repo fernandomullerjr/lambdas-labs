@@ -1258,7 +1258,8 @@ Response
 
 
 
-
+- TSHOOT
+https://stackoverflow.com/questions/54665842/when-importing-tensorflow-i-get-the-following-error-no-module-named-numpy-cor
 
 
 - Novo teste
@@ -1269,3 +1270,62 @@ numpy-1.24.3-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64
 
 PARA:
 numpy-1.21.0-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64
+
+
+- Criando nova layer
+Baixando novamente os arquivos do pypi org - Baixando na versao 3-8 do python - Ajustando estrutura de pastas - Downgrade do numpy para 1-21
+
+pandas-matplotlib-reportlab-camadas
+Create version
+
+    Successfully created layer pandas-matplotlib-reportlab-camadas version 6.
+
+
+
+- ERRO, novo erro:
+
+~~~~BASH
+Test Event Name
+teste-pandas
+
+Response
+{
+  "errorMessage": "Unable to import module 'pandas4': No module named 'packaging'",
+  "errorType": "Runtime.ImportModuleError",
+  "stackTrace": []
+}
+~~~~
+
+
+
+
+
+- Ajustando:
+/home/fernando/cursos/lambdas-labs/json-to-pdf/pandas4.py
+
+- Adicionando:
+import packaging
+
+- Criando nova version da Layer:
+Baixando novamente os arquivos do pypi org - Baixando na versao 3-8 do python - Ajustando estrutura de pastas - Downgrade do numpy para 1-21 - add packaging
+
+pandas-matplotlib-reportlab-camadas
+Create version
+
+    Successfully created layer pandas-matplotlib-reportlab-camadas version 7.
+
+
+- Novo erro:
+
+~~~~BASH
+Test Event Name
+teste-pandas
+
+Response
+{
+  "errorMessage": "Unable to import module 'pandas4': No module named 'PIL'",
+  "errorType": "Runtime.ImportModuleError",
+  "stackTrace": []
+}
+
+~~~~

@@ -7,6 +7,7 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 import numpy as np
 import pytz
+import packaging
 
 s3 = boto3.client('s3')
 bucket_name = 'devops-luxor'
