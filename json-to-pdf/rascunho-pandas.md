@@ -1395,12 +1395,62 @@ Além disso, é importante configurar corretamente as permissões e credenciais 
 Lembre-se de substituir 'seu-bucket' pelo nome do seu bucket S3 e 'caminho/do/arquivo.json' pelo caminho correto do arquivo JSON dentro do seu bucket.
 
 
+teria uma versão utilizando o pandas para converter o JSON para PDF?
+ChatGPT
+
+Peço desculpas pelo equívoco anterior. Aqui está uma versão atualizada do código utilizando o pandas para converter o JSON para PDF:
+
+~~~~python
+
+import boto3
+import json
+import pandas as pd
+import pdfkit
+
+s3 = boto3.client('s3')
+
+def read_json_from_s3(bucket, key):
+    response = s3.get_object(Bucket=bucket, Key=key)
+    json_data = response['Body'].read().decode('utf-8')
+    return json.loads(json_data)
+
+def convert_json_to_pdf(json_data):
+    df = pd.DataFrame.from_dict(json_data)
+    html = df.to_html(index=False)
+    pdfkit.from_string(html, '/tmp/relatorio.pdf')
+
+def upload_pdf_to_s3(bucket, key):
+    s3.upload_file('/tmp/relatorio.pdf', bucket, key)
+
+def lambda_handler(event, context):
+    # Define o bucket do S3 e o caminho do arquivo JSON
+    bucket = 'seu-bucket'
+    json_key = 'caminho/do/arquivo.json'
+
+    # Lê o arquivo JSON do S3
+    json_data = read_json_from_s3(bucket, json_key)
+
+    # Converte o JSON para PDF utilizando o pandas
+    convert_json_to_pdf(json_data)
+
+    # Define o nome do arquivo PDF convertido
+    pdf_key = 'relatorio-final-pdf.pdf'
+
+    # Envia o PDF convertido para o S3
+    upload_pdf_to_s3(bucket, pdf_key)
+~~~~
+
+Neste exemplo, o código utiliza a biblioteca pandas para converter o JSON em um DataFrame. Em seguida, o DataFrame é convertido para HTML utilizando o método to_html(). Por fim, o HTML é convertido para PDF utilizando o pdfkit.
+
+Certifique-se de ter instalado as bibliotecas pandas e pdfkit no ambiente em que você está executando o código. Além disso, lembre-se de configurar corretamente as permissões e credenciais para permitir o acesso ao S3 e as operações de leitura, gravação e upload de arquivos. Não esqueça de substituir 'seu-bucket' pelo nome do seu bucket S3 e 'caminho/do/arquivo.json' pelo caminho correto do arquivo JSON dentro do seu bucket.
+
+
 
 
 
 
 # PENDENTE
-- Testar código para converter em PDF.
+- Testar código para converter em PDF. Usar modelo do GPT que usa pdfkit.
 
 - Stop/Start na EC2
 - Devolver ip elástico da EC2.
@@ -1411,3 +1461,31 @@ Lembre-se de substituir 'seu-bucket' pelo nome do seu bucket S3 e 'caminho/do/ar
 
 
 
+
+
+
+
+
+
+
+pandas-pdfkit
+Create version
+
+    Successfully created layer pandas-pdfkit version 1.
+
+
+- ERRO 
+
+~~~~BASH
+
+Test Event Name
+teste-pandas
+
+Response
+{
+  "errorMessage": "Unable to import module 'pandas5': Unable to import required dependencies:\nnumpy: No module named 'numpy'\npytz: No module named 'pytz'",
+  "errorType": "Runtime.ImportModuleError",
+  "stackTrace": []
+}
+
+~~~~
