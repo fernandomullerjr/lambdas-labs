@@ -1329,3 +1329,86 @@ Response
 }
 
 ~~~~
+
+
+
+
+
+
+
+
+
+preciso de um código em Python para AWS Lambda, contendo 4 funções
+1 função que vai ler um arquivo JSON a partir de um bucket do S3.
+1 Função que vai converter o JSON para PDF utilizando o pandas.
+1 função que vai enviar o PDF convertido para o bucket do S3 com um nome relatorio-final-pdf.pdf
+1 função que vai ser o lambda_handler, chamando as funções que foram criadas.
+
+Preciso que o código seja simples e não tenha muitas dependencias e bibliotecas adicionais.
+ChatGPT
+
+Aqui está um exemplo de código em Python para AWS Lambda que atende aos requisitos mencionados:
+
+python
+
+import boto3
+import json
+import pandas as pd
+import pdfkit
+
+s3 = boto3.client('s3')
+
+def read_json_from_s3(bucket, key):
+    response = s3.get_object(Bucket=bucket, Key=key)
+    json_data = response['Body'].read().decode('utf-8')
+    return json.loads(json_data)
+
+def convert_json_to_pdf(json_data):
+    df = pd.DataFrame(json_data)
+    html = df.to_html()
+    pdfkit.from_string(html, '/tmp/relatorio.pdf')
+
+def upload_pdf_to_s3(bucket, key):
+    s3.upload_file('/tmp/relatorio.pdf', bucket, key)
+
+def lambda_handler(event, context):
+    # Define o bucket do S3 e o caminho do arquivo JSON
+    bucket = 'seu-bucket'
+    json_key = 'caminho/do/arquivo.json'
+
+    # Lê o arquivo JSON do S3
+    json_data = read_json_from_s3(bucket, json_key)
+
+    # Converte o JSON para PDF utilizando o pandas
+    convert_json_to_pdf(json_data)
+
+    # Define o nome do arquivo PDF convertido
+    pdf_key = 'relatorio-final-pdf.pdf'
+
+    # Envia o PDF convertido para o S3
+    upload_pdf_to_s3(bucket, pdf_key)
+
+Este código utiliza as bibliotecas boto3, json, pandas e pdfkit. Certifique-se de ter instalado o pandas e o pdfkit no ambiente em que você está executando o código.
+
+Além disso, é importante configurar corretamente as permissões e credenciais no ambiente em que você está executando o código para permitir acesso ao S3 e às operações de leitura, gravação e upload de arquivos.
+
+Lembre-se de substituir 'seu-bucket' pelo nome do seu bucket S3 e 'caminho/do/arquivo.json' pelo caminho correto do arquivo JSON dentro do seu bucket.
+
+
+
+
+
+
+# PENDENTE
+- TSHOOT erro no import Numpy. Ver versões PANDA vs NUMPY.
+- Testar código para converter em PDF.
+
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+- Documentar questões sobre Camadas para as Lambdas.
+
+
+
