@@ -1400,7 +1400,6 @@ Lembre-se de substituir 'seu-bucket' pelo nome do seu bucket S3 e 'caminho/do/ar
 
 
 # PENDENTE
-- TSHOOT erro no import Numpy. Ver versões PANDA vs NUMPY.
 - Testar código para converter em PDF.
 
 - Stop/Start na EC2
