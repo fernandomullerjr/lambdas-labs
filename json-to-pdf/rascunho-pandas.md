@@ -1687,3 +1687,81 @@ def lambda_handler(event, context):
 Neste código, a função convert_json_to_html converte o JSON em HTML usando o pandas, da mesma forma que antes. A função convert_html_to_pdf utiliza o weasyprint para converter o HTML em bytes do PDF. Em seguida, a função upload_pdf_to_s3 é usada para enviar o PDF convertido para o Amazon S3.
 
 Certifique-se de que a biblioteca weasyprint esteja instalada no ambiente do AWS Lambda com Python 3.8. Você pode criar um pacote de implementação personalizado com as bibliotecas necessárias, incluindo o weasyprint, e fazer o upload como o pacote da função Lambda.
+
+
+
+
+
+
+
+
+pandas-numpy-pytz-weasyprint
+Create version
+
+    Successfully created layer pandas-numpy-pytz-weasyprint version 1.
+
+
+
+- Erro:
+
+~~~~BASH
+Test Event Name
+teste
+
+Response
+{
+  "errorMessage": "Unable to import module 'pandas6': No module named 'cssselect2'",
+  "errorType": "Runtime.ImportModuleError",
+  "stackTrace": []
+}
+
+~~~~
+
+
+
+
+
+
+além do cssselect2, qual outra é necessária?
+ChatGPT
+
+Além do cssselect2, existem outras dependências necessárias para o correto funcionamento do weasyprint no AWS Lambda.
+
+Aqui estão as dependências adicionais que você precisa incluir junto com o pacote da função Lambda:
+
+    cairocffi: É uma biblioteca para manipulação de gráficos 2D que é utilizada pelo weasyprint.
+
+    cffi: É uma biblioteca para invocar rotinas C a partir do Python, utilizada pelo cairocffi.
+
+    Pillow: É uma biblioteca para processamento de imagens, utilizada pelo weasyprint.
+
+    pycparser: É uma biblioteca para analisar código C, utilizada pelo cffi.
+
+Você pode instalá-las no ambiente virtual do Python seguindo os passos mencionados anteriormente. Aqui está o comando atualizado para instalar todas as dependências:
+
+bash
+
+pip install pandas weasyprint cssselect2 cairocffi cffi Pillow -t .
+
+Certifique-se de executar esse comando dentro do ambiente virtual criado anteriormente e antes de compactar o diretório como um arquivo ZIP para fazer o upload no AWS Lambda.
+
+Ao incluir todas essas dependências no pacote da função Lambda, você garante que o ambiente do AWS Lambda tenha todas as bibliotecas necessárias para executar o código corretamente.
+
+
+
+
+
+
+# PENDENTE
+
+- AWS Lambda usa Amazon Linux 2.
+- Avaliar uso de HTML mesmo. Adotar o json2html???
+- Testar código para converter em PDF. Usar modelo do GPT que usa pdfkit. Ver dependencias do Pandas. Ver sobre "Optional dependencies".
+    https://pandas.pydata.org/docs/getting_started/install.html
+    <https://pandas.pydata.org/docs/getting_started/install.html>
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+- Documentar questões sobre Camadas para as Lambdas.
