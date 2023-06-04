@@ -1579,3 +1579,111 @@ Response
 }
 
 ~~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pip install -r requirements.txt -t pandas_lambda/
+
+pip3 install -r requirements.txt -t pandas_lambda/
+
+
+
+
+
+
+
+
+
+
+
+
+# PENDENTE
+
+- AWS Lambda usa Amazon Linux 2.
+- Testar código para converter em PDF. Usar modelo do GPT que usa pdfkit. Ver dependencias do Pandas. Ver sobre "Optional dependencies".
+    https://pandas.pydata.org/docs/getting_started/install.html
+    <https://pandas.pydata.org/docs/getting_started/install.html>
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+- Documentar questões sobre Camadas para as Lambdas.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sim, é possível criar um código que não use o pdfkit para converter HTML em PDF. Em vez disso, você pode utilizar uma biblioteca como o weasyprint para realizar essa conversão.
+
+Aqui está o código adaptado sem o uso do pdfkit:
+
+~~~~python
+
+import boto3
+import json
+import pandas as pd
+from weasyprint import HTML
+
+s3 = boto3.client('s3')
+
+def read_json_from_s3(bucket, key):
+    response = s3.get_object(Bucket=bucket, Key=key)
+    json_data = response['Body'].read().decode('utf-8')
+    return json.loads(json_data)
+
+def convert_json_to_html(json_data):
+    df = pd.DataFrame.from_dict(json_data)
+    html = df.to_html(index=False)
+    return html
+
+def convert_html_to_pdf(html):
+    pdf_bytes = HTML(string=html).write_pdf()
+    return pdf_bytes
+
+def upload_pdf_to_s3(bucket, key, pdf_bytes):
+    s3.put_object(Body=pdf_bytes, Bucket=bucket, Key=key)
+
+def lambda_handler(event, context):
+    # Define o bucket do S3 e o caminho do arquivo JSON
+    bucket = 'devops-luxor'
+    json_key = 'base1.json'
+
+    # Lê o arquivo JSON do S3
+    json_data = read_json_from_s3(bucket, json_key)
+
+    # Converte o JSON para HTML utilizando o pandas
+    html = convert_json_to_html(json_data)
+
+    # Converte o HTML para PDF utilizando o weasyprint
+    pdf_bytes = convert_html_to_pdf(html)
+
+    # Define o nome do arquivo PDF convertido
+    pdf_key = 'relatorio-final-pandas.pdf'
+
+    # Envia o PDF convertido para o S3
+    upload_pdf_to_s3(bucket, pdf_key, pdf_bytes)
+~~~~
+
+Neste código, a função convert_json_to_html converte o JSON em HTML usando o pandas, da mesma forma que antes. A função convert_html_to_pdf utiliza o weasyprint para converter o HTML em bytes do PDF. Em seguida, a função upload_pdf_to_s3 é usada para enviar o PDF convertido para o Amazon S3.
+
+Certifique-se de que a biblioteca weasyprint esteja instalada no ambiente do AWS Lambda com Python 3.8. Você pode criar um pacote de implementação personalizado com as bibliotecas necessárias, incluindo o weasyprint, e fazer o upload como o pacote da função Lambda.
