@@ -9,7 +9,7 @@ git status
 eval $(ssh-agent -s)
 ssh-add /home/fernando/.ssh/chave-debian10-github
 git add .
-git commit -m "Lambda Labs - JSON 2 PDF"
+git commit -m "Lambda Labs - JSON 2 PDF. Pandas"
 git push
 git status
 
@@ -267,7 +267,7 @@ python3-reportlab set to manually installed.
 
 Aqui está o código ajustado para ler um arquivo JSON local chamado "base1.json", fazer a conversão para PDF com base nesse arquivo e salvar o PDF na mesma pasta:
 
-python
+~~~~python
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -375,6 +375,7 @@ if __name__ == "__main__":
 
         # Salva o PDF na mesma pasta do JSON local
         save_pdf_to_local(json_file_path, output_pdf_file)
+~~~~
 
 Nesse código, foram adicionadas duas novas funções:
 
@@ -413,7 +414,7 @@ Com essas duas alterações, você poderá utilizar um arquivo com um nome difer
 
 - ERRO
 
-
+~~~~bash
 fernando@debian10x64:~/cursos/lambdas-labs/json-to-pdf$ python3 /home/fernando/cursos/lambdas-labs/json-to-pdf/pandas2.py
 Traceback (most recent call last):
   File "/home/fernando/cursos/lambdas-labs/json-to-pdf/pandas2.py", line 103, in <module>
@@ -422,7 +423,7 @@ Traceback (most recent call last):
     data = pd.json_normalize(json.loads(json_content), "findings")
 AttributeError: module 'pandas' has no attribute 'json_normalize'
 fernando@debian10x64:~/cursos/lambdas-labs/json-to-pdf$
-
+~~~~
 
 
 
@@ -452,11 +453,11 @@ Depois de atualizar o Pandas, tente executar o código novamente e verifique se 
 
 
 
-
+~~~~bash
 fernando@debian10x64:~/cursos/lambdas-labs/json-to-pdf$ python3 /home/fernando/cursos/lambdas-labs/json-to-pdf/teste-valida-versao-panda.py
 0.23.3
 fernando@debian10x64:~/cursos/lambdas-labs/json-to-pdf$
-
+ 
 
 
 
@@ -476,7 +477,7 @@ Collecting pandas
     ----------------------------------------
 Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-install-wef2t_ki/pandas/
 fernando@debian10x64:~/cursos/lambdas-labs/json-to-pdf$
-
+~~~~
 
 
 
@@ -959,6 +960,7 @@ Description
 
 /home/fernando/cursos/lambdas-labs/json-to-pdf/pandas3.py
 
+~~~~BASH
 Test Event Name
 teste-pandas
 
@@ -999,7 +1001,7 @@ REPORT RequestId: 91db972a-81e6-406b-a27a-e4ecad2523c1	Duration: 1.65 ms	Billed 
 
 Request ID
 91db972a-81e6-406b-a27a-e4ecad2523c1
-
+~~~~
 
 
 
@@ -1030,10 +1032,11 @@ ChatGPT
 
 Para importar as bibliotecas numpy e pytz no seu código, você pode usar a seguinte sintaxe:
 
-python
+~~~~python
 
 import numpy as np
 import pytz
+~~~~
 
 Isso importará o numpy com o alias np, permitindo que você use suas funções e objetos prefixados com np. Por exemplo, você pode usar np.array() para criar um array do numpy.
 
@@ -1041,7 +1044,7 @@ O pytz pode ser importado diretamente sem um alias. Você pode usar suas funçõ
 
 Aqui está um exemplo de código que importa o numpy e o pytz:
 
-python
+~~~~python
 
 import numpy as np
 import pytz
@@ -1053,6 +1056,7 @@ print(arr)
 # Usando o pytz
 timezone = pytz.timezone('America/New_York')
 print(timezone)
+~~~~
 
 Certifique-se de ter instalado as bibliotecas numpy e pytz em seu ambiente Python antes de executar o código. Você pode instalá-las usando o pip. Por exemplo:
 
@@ -1081,6 +1085,8 @@ Lembre-se de que, ao usar as camadas do AWS Lambda, você não precisa se preocu
 
 
 - ERRO
+
+~~~~BASH
 Test Event Name
 teste-pandas
 
@@ -1122,6 +1128,7 @@ REPORT RequestId: cc85d947-22dd-46c8-a39c-087d965e481c	Duration: 1.50 ms	Billed 
 Request ID
 cc85d947-22dd-46c8-a39c-087d965e481c
 
+~~~~
 
 
 
@@ -1171,3 +1178,52 @@ Tente aplicar essas soluções e veja se o erro persiste.
 - Terminate EC2.
 - Deletar funções Lambda.
 - Documentar questões sobre Camadas para as Lambdas.
+
+
+
+
+
+
+
+
+
+
+
+
+# DIA 03/06/2023
+
+pandas-matplotlib-reportlab-camadas
+Create version
+
+    Successfully created layer pandas-matplotlib-reportlab-camadas version 4.
+
+
+- Usando esta estrutura dentro do python.zip, deu erro:
+
+matplotlib-3.7.1-cp38-cp38-manylinux_2_12_x86_64.manylinux2010_x86_64
+numpy-1.24.3-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64
+pandas-2.0.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64
+pytz-2023.3-py2.py3-none-any
+
+- ERRO:
+
+~~~~BASH
+Test Event Name
+teste-pandas
+
+Response
+{
+  "errorMessage": "Unable to import module 'pandas4': No module named 'pandas'",
+  "errorType": "Runtime.ImportModuleError",
+  "stackTrace": []
+}
+~~~~
+
+
+
+
+
+
+
+
+Baixando novamente os arquivos do pypi org - Baixando na versao 3-8 do python - Ajustando estrutura de pastas - 
