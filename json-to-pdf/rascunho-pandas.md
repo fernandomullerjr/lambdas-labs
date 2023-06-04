@@ -1539,3 +1539,43 @@ pytz
 - Documentar questões sobre Camadas para as Lambdas.
 
 
+
+
+
+
+
+# Dia 04/06/2023
+
+
+
+pandas-pdfkit
+Create version
+
+    Successfully created layer pandas-pdfkit version 2.
+
+
+2	arn:aws:lambda:us-east-1:261106957109:layer:pandas-pdfkit:2	Adicionando o numpy e o pytz
+
+
+
+
+- Novo Erro:
+
+~~~~BASH
+Test Event Name
+teste-pandas
+
+Response
+{
+  "errorMessage": "No wkhtmltopdf executable found: \"\"\nIf this file exists please check that this process can read it or you can pass path to it manually in method call, check README. Otherwise please install wkhtmltopdf - https://github.com/JazzCore/python-pdfkit/wiki/Installing-wkhtmltopdf",
+  "errorType": "OSError",
+  "stackTrace": [
+    "  File \"/var/task/pandas5.py\", line 30, in lambda_handler\n    convert_json_to_pdf(json_data)\n",
+    "  File \"/var/task/pandas5.py\", line 16, in convert_json_to_pdf\n    pdfkit.from_string(html, '/tmp/relatorio.pdf')\n",
+    "  File \"/opt/python/pdfkit/api.py\", line 72, in from_string\n    r = PDFKit(input, 'string', options=options, toc=toc, cover=cover, css=css,\n",
+    "  File \"/opt/python/pdfkit/pdfkit.py\", line 45, in __init__\n    self.configuration = (Configuration() if configuration is None\n",
+    "  File \"/opt/python/pdfkit/configuration.py\", line 38, in __init__\n    raise IOError('No wkhtmltopdf executable found: \"%s\"\\n'\n"
+  ]
+}
+
+~~~~
