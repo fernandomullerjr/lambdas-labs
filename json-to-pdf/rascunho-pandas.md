@@ -1489,3 +1489,53 @@ Response
 }
 
 ~~~~
+
+
+
+
+- Dependencias do PANDAS
+
+https://pandas.pydata.org/docs/getting_started/install.html
+
+Dependencies
+Required dependencies
+
+pandas requires the following dependencies.
+
+Package
+	
+
+Minimum supported version
+
+NumPy
+	
+
+1.20.3
+
+python-dateutil
+	
+
+2.8.2
+
+pytz
+	
+
+2020.1
+
+
+
+
+
+
+# PENDENTE
+- Testar código para converter em PDF. Usar modelo do GPT que usa pdfkit. Ver dependencias do Pandas. Ver sobre "Optional dependencies".
+    https://pandas.pydata.org/docs/getting_started/install.html
+    <https://pandas.pydata.org/docs/getting_started/install.html>
+- Stop/Start na EC2
+- Devolver ip elástico da EC2.
+- Desativar Amazon Inspector antes do fim do Trial.
+- Terminate EC2.
+- Deletar funções Lambda.
+- Documentar questões sobre Camadas para as Lambdas.
+
+
